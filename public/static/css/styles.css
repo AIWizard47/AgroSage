@@ -437,4 +437,101 @@ button {
   font-size: 0.9rem;
 }
 
-/* Removed all media queries to make the site non-responsive */
+/* Removed all media queries to make the site non-responsive */.cta-section {
+  position: relative;
+  overflow: hidden;
+  background: #f4f4f4;
+  padding: 50px 0;
+  text-align: center;
+}
+
+.scrolling-images {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  animation: slideIn 5.5s ease-out forwards;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.cta-section:hover .scrolling-images {
+  animation: slideIn 1.5s ease-out forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.scrolling-images img {
+  height: 220px;
+  width: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.6s ease;
+}
+
+.scrolling-images img:hover {
+  transform: scale(1.05);
+}
+
+/* Dashboard Section Styling */
+.dashboard-section {
+  font-family: Arial, sans-serif;
+  background-color: #f1fdfd;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.dashboard-section h2 {
+  color: #2c7a7b;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.dashboard-section .section-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.dashboard-section .feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.dashboard-section .feature-card {
+  background-color: #e6fffa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+
+.dashboard-section .feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.dashboard-section .feature-icon {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.dashboard-section .feature-card h3 {
+  color: #2c7a7b;
+  margin-bottom: 10px;
+}
+
+.dashboard-section .feature-card p {
+  font-size: 0.95rem;
+  color: #444;
+}
