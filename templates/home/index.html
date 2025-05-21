@@ -37,7 +37,13 @@
         <!-- prefered language and register -->
         <div class="cta-buttons">
           <button class="btn-language">English / हिन्दी</button>
-          <button class="btn-primary">Register</button>
+
+        {% if not user.is_authenticated %}
+          <button class="btn-primary" onclick="window.location.href='/login/'">Register</button>
+        {% else %}
+          <button class="btn-primary" onclick="window.location.href='{% url 'logout' %}'">LogOut</button>
+        {% endif %}
+            
         </div>
       </div>
     </header>
@@ -248,7 +254,7 @@
         <div class="footer-grid">
           <div class="footer-info">
             <div class="logo">
-              <img class="logo-icon" src="/media/agrosagelogo.jpg" alt="AroSage">
+              <img class="logo-icon" src="{% static '/media/agrosagelogo.jpg' %}" alt="AroSage">
                 <path d="M7 17H5C3.89543 17 3 16.1046 3 15V9C3 7.89543 3.89543 7 5 7H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <path d="M13 3L13 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <path d="M22 12L13 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroSage - Login & Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f7f9f4;
+      }
+      .auth-container {
+        background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%2392c35e' fill-opacity='0.1' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/svg%3E");
+      }
+      .user-type-btn {
+        transition: all 0.3s ease;
+      }
+      .user-type-btn.active {
+        background-color: #4d7c0f;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+      .form-appear {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .logo-container {
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen flex items-center justify-center p-4">
+      <div class="auth-container w-full max-w-4xl rounded-xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+        <!-- Left Side - Image/Logo -->
+        <div class="bg-lime-700 text-white w-full md:w-2/5 p-8 flex flex-col justify-between">
+          <div>
+            <div class="logo-container mb-6">
+              <svg class="w-12 h-12 mr-3" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 58.667C46.7276 58.667 58.6667 46.7279 58.6667 32.0003C58.6667 17.2727 46.7276 5.33366 32 5.33366C17.2724 5.33366 5.33334 17.2727 5.33334 32.0003C5.33334 46.7279 17.2724 58.667 32 58.667Z" fill="#E8F5E9" />
+                <path d="M32 10.667C43.0458 10.667 52 19.6212 52 30.667C52 41.7127 43.0458 50.667 32 50.667C20.9543 50.667 12 41.7127 12 30.667C12 19.6212 20.9543 10.667 32 10.667Z" fill="#81C784" />
+                <path d="M32 16C40.8366 16 48 23.1634 48 32C48 40.8366 40.8366 48 32 48C23.1634 48 16 40.8366 16 32C16 23.1634 23.1634 16 32 16Z" fill="#4CAF50" />
+                <path d="M32 21.333C37.891 21.333 42.6667 26.109 42.6667 32C42.6667 37.891 37.891 42.6667 32 42.6667C26.109 42.6667 21.3333 37.891 21.3333 32C21.3333 26.109 26.109 21.333 32 21.333Z" fill="#2E7D32" />
+                <path d="M32 26.667C34.9455 26.667 37.3333 29.0548 37.3333 32.0003C37.3333 34.9458 34.9455 37.3337 32 37.3337C29.0545 37.3337 26.6667 34.9458 26.6667 32.0003C26.6667 29.0548 29.0545 26.667 32 26.667Z" fill="#FFFFFF" />
+                <path d="M18.6667 13.3337L13.3333 18.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M50.6667 13.3337L45.3333 18.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M18.6667 50.6667L13.3333 45.3333" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M50.6667 50.6667L45.3333 45.3333" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M32 5.33366V10.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M32 53.3337V58.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M5.33334 32H10.6667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M53.3333 32H58.6667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              <h1 class="text-3xl font-bold">AgroSage</h1>
+            </div>
+            <h2 class="text-3xl font-bold mb-4">Welcome to the Farming Community</h2>
+            <p class="text-lime-100 mb-8">Connect with farmers and vendors to grow your agricultural business.</p>
+          </div>
+          <div>
+            <div class="flex space-x-4 mb-4">
+              <div class="w-2 h-2 rounded-full bg-lime-200"></div>
+              <div class="w-2 h-2 rounded-full bg-lime-200"></div>
+              <div class="w-2 h-2 rounded-full bg-lime-200"></div>
+            </div>
+            <p class="text-sm text-lime-200">&copy; 2023 AgroSage. All rights reserved.</p>
+          </div>
+        </div>
+
+        <!-- Right Side - Auth Forms -->
+        <div class="bg-white w-full md:w-3/5 p-8">
+          <!-- Logo for mobile view -->
+          <div class="md:hidden flex justify-center mb-6">
+            <div class="logo-container">
+              <svg class="w-10 h-10 mr-2" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 58.667C46.7276 58.667 58.6667 46.7279 58.6667 32.0003C58.6667 17.2727 46.7276 5.33366 32 5.33366C17.2724 5.33366 5.33334 17.2727 5.33334 32.0003C5.33334 46.7279 17.2724 58.667 32 58.667Z" fill="#E8F5E9" />
+                <path d="M32 10.667C43.0458 10.667 52 19.6212 52 30.667C52 41.7127 43.0458 50.667 32 50.667C20.9543 50.667 12 41.7127 12 30.667C12 19.6212 20.9543 10.667 32 10.667Z" fill="#81C784" />
+                <path d="M32 16C40.8366 16 48 23.1634 48 32C48 40.8366 40.8366 48 32 48C23.1634 48 16 40.8366 16 32C16 23.1634 23.1634 16 32 16Z" fill="#4CAF50" />
+                <path d="M32 21.333C37.891 21.333 42.6667 26.109 42.6667 32C42.6667 37.891 37.891 42.6667 32 42.6667C26.109 42.6667 21.3333 37.891 21.3333 32C21.3333 26.109 26.109 21.333 32 21.333Z" fill="#2E7D32" />
+                <path d="M32 26.667C34.9455 26.667 37.3333 29.0548 37.3333 32.0003C37.3333 34.9458 34.9455 37.3337 32 37.3337C29.0545 37.3337 26.6667 34.9458 26.6667 32.0003C26.6667 29.0548 29.0545 26.667 32 26.667Z" fill="#FFFFFF" />
+                <path d="M18.6667 13.3337L13.3333 18.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M50.6667 13.3337L45.3333 18.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M18.6667 50.6667L13.3333 45.3333" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M50.6667 50.6667L45.3333 45.3333" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M32 5.33366V10.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M32 53.3337V58.667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M5.33334 32H10.6667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+                <path d="M53.3333 32H58.6667" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              <h1 class="text-2xl font-bold text-lime-700">AgroSage</h1>
+            </div>
+          </div>
+
+          <!-- Toggle between Login and Register -->
+          <div class="flex justify-center mb-8">
+            <button id="loginToggle" class="px-6 py-2 font-medium border-b-2 border-lime-600 text-lime-700">Login</button>
+            <button id="registerToggle" class="px-6 py-2 font-medium border-b-2 border-gray-200 text-gray-500">Register</button>
+          </div>
+
+          <!-- Login Form -->
+          <div id="loginForm" class="form-appear">
+            <h3 class="text-2xl font-semibold mb-6 text-center">Login to Your Account</h3>
+
+            <!-- User Type Selection -->
+            <div class="mb-6">
+              <label class="block text-gray-700 mb-2">I am a:</label>
+              <div class="flex space-x-4">
+                <button class="user-type-btn active flex-1 py-3 px-4 rounded-lg border border-lime-600 text-center font-medium" data-type="farmer">
+                  <svg class="w-6 h-6 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                  </svg>Farmer
+                </button>
+                <button class="user-type-btn flex-1 py-3 px-4 rounded-lg border border-gray-300 text-center font-medium" data-type="vendor">
+                  <svg class="w-6 h-6 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                  </svg>Vendor
+                </button>
+              </div>
+            </div>
+
+            <form method="POST" action="{% url 'login' %}">
+              {% csrf_token %}
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="login-email">Email Address</label>
+                <input type="text" name="username" id="login-email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="your@email.com" required />
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="login-password">Password</label>
+                <input type="password" name="password" id="login-password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="••••••••" required />
+              </div>
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded" />
+                  <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                </div>
+                <a href="" class="text-sm font-medium text-lime-600 hover:text-lime-800">Forgot password?</a>
+              </div>
+              <button type="submit" class="w-full bg-lime-600 text-white py-3 rounded-lg font-medium hover:bg-lime-700 transition duration-300">Login</button>
+            </form>
+          </div>
+
+          <!-- Register Form (Hidden by default) -->
+          <div id="registerForm" class="hidden">
+            <h3 class="text-2xl font-semibold mb-6 text-center">Create an Account</h3>
+
+            <!-- User Type Selection -->
+            <div class="mb-6">
+              <label class="block text-gray-700 mb-2">I want to register as:</label>
+              <div class="flex space-x-4">
+                <button class="user-type-btn active flex-1 py-3 px-4 rounded-lg border border-lime-600 text-center font-medium" data-type="farmer">
+                  <svg class="w-6 h-6 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                  </svg>Farmer
+                </button>
+                <button class="user-type-btn flex-1 py-3 px-4 rounded-lg border border-gray-300 text-center font-medium" data-type="vendor">
+                  <svg class="w-6 h-6 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                  </svg>Vendor
+                </button>
+              </div>
+            </div>
+
+            <form method="POST" action="{% url 'register' %}">
+              {% csrf_token %}
+              <input type="hidden" name="user_type" id="user-type-input" value="farmer">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-gray-700 mb-2" for="register-firstname">First Name</label>
+                  <input name="first_name" type="text" id="register-firstname" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="John" required />
+                </div>
+                <div>
+                  <label class="block text-gray-700 mb-2" for="register-lastname">Last Name</label>
+                  <input name="last_name" type="text" id="register-lastname" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="Doe" required />
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="register-email">Email Address</label>
+                <input name="email" type="email" id="register-email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="your@email.com" required />
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="register-phone">Phone Number</label>
+                <input name="phone" type="tel" id="register-phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="(123) 456-7890" />
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700 mb-2" for="register-password">Password</label>
+                <input name="password" type="password" id="register-password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="••••••••" required />
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2" for="register-confirm-password">Confirm Password</label>
+                <input name="confirm_password" type="password" id="register-confirm-password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent" placeholder="••••••••" required />
+              </div>
+              <div class="flex items-center mb-6">
+                <input type="checkbox" id="terms" class="h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded" required />
+                <label for="terms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="text-lime-600 hover:text-lime-800">Terms of Service</a> and <a href="#" class="text-lime-600 hover:text-lime-800">Privacy Policy</a></label>
+              </div>
+              <button type="submit" class="w-full bg-lime-600 text-white py-3 rounded-lg font-medium hover:bg-lime-700 transition duration-300">Create Account</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll('.user-type-btn').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.user-type-btn').forEach((b) => b.classList.remove('active'))
+          this.classList.add('active')
+          document.getElementById('user-type-input').value = this.getAttribute('data-type')
+        })
+      })
+      // Toggle between login and register forms
+      const loginToggle = document.getElementById('loginToggle')
+      const registerToggle = document.getElementById('registerToggle')
+      const loginForm = document.getElementById('loginForm')
+      const registerForm = document.getElementById('registerForm')
+      
+      loginToggle.addEventListener('click', () => {
+        loginForm.classList.remove('hidden')
+        registerForm.classList.add('hidden')
+        loginToggle.classList.add('border-lime-600', 'text-lime-700')
+        loginToggle.classList.remove('border-gray-200', 'text-gray-500')
+        registerToggle.classList.add('border-gray-200', 'text-gray-500')
+        registerToggle.classList.remove('border-lime-600', 'text-lime-700')
+        loginForm.classList.add('form-appear')
+      })
+      
+      registerToggle.addEventListener('click', () => {
+        loginForm.classList.add('hidden')
+        registerForm.classList.remove('hidden')
+        registerToggle.classList.add('border-lime-600', 'text-lime-700')
+        registerToggle.classList.remove('border-gray-200', 'text-gray-500')
+        loginToggle.classList.add('border-gray-200', 'text-gray-500')
+        loginToggle.classList.remove('border-lime-600', 'text-lime-700')
+        registerForm.classList.add('form-appear')
+      })
+      
+      // User type selection
+      const userTypeButtons = document.querySelectorAll('.user-type-btn')
+      
+      userTypeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          // Find all buttons in the same container
+          const container = button.parentElement
+          const buttons = container.querySelectorAll('.user-type-btn')
+      
+          // Remove active class from all buttons
+          buttons.forEach((btn) => {
+            btn.classList.remove('active')
+            btn.classList.remove('bg-lime-600', 'text-white')
+            btn.classList.add('border-gray-300')
+          })
+      
+          // Add active class to clicked button
+          button.classList.add('active')
+          button.classList.add('bg-lime-600', 'text-white')
+          button.classList.remove('border-gray-300')
+          button.classList.add('border-lime-600')
+        })
+      })
+    </script>
+    <script>
+      ;(function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document
+          if (b) {
+            var d = b.createElement('script')
+            d.innerHTML = "window.__CF$cv$params={r:'9434ce37f78155a5',t:'MTc0NzgzODE4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"
+            b.getElementsByTagName('head')[0].appendChild(d)
+          }
+        }
+        if (document.body) {
+          var a = document.createElement('iframe')
+          a.height = 1
+          a.width = 1
+          a.style.position = 'absolute'
+          a.style.top = 0
+          a.style.left = 0
+          a.style.border = 'none'
+          a.style.visibility = 'hidden'
+          document.body.appendChild(a)
+          if ('loading' !== document.readyState) c()
+          else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c)
+          else {
+            var e = document.onreadystatechange || function () {}
+            document.onreadystatechange = function (b) {
+              e(b)
+              'loading' !== document.readyState && ((document.onreadystatechange = e), c())
+            }
+          }
+        }
+      })()
+    </script>
+  </body>
+</html>
