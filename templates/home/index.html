@@ -54,7 +54,17 @@
           <h1>Digital Solutions for Modern Farming</h1>
           <p>Empowering Indian farmers with technology. Get crop monitoring, expert advice, and connect directly with buyers.</p>
           <div class="hero-cta">
-            <button class="btn-primary">visit</button>
+            
+              {% if user.is_authenticated %}
+                {% if is_farmer %}
+                  <button class="btn-primary">Dashboard</button>
+                {% elif is_vendor %}
+                  <button class="btn-primary" onclick="window.location.href='{% url 'market' %}'">Market</button>
+                {% endif %}
+              {% else %}
+                <button class="btn-primary">Visit</button>
+              {% endif %}
+              
             <button class="btn-secondary">Learn More</button>
           </div>
         </div>
