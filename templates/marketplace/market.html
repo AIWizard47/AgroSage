@@ -115,175 +115,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Featured Products -->
-    <section class="py-12">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold heading text-gray-800">Featured Products</h2>
-                <div class="flex space-x-2">
-                    <button id="prev-featured" class="p-2 rounded-full border border-gray-300 hover:bg-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button id="next-featured" class="p-2 rounded-full border border-gray-300 hover:bg-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
-                    <div class="relative">
-                        <div class="h-56 bg-green-100 flex items-center justify-center">
-                            <svg class="w-32 h-32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="100" cy="100" r="80" fill="#a5d6a7"/>
-                                <path d="M70 80C70 80 85 60 100 60C115 60 130 80 130 80" stroke="#2c5e2e" stroke-width="5"/>
-                                <path d="M60 100C60 100 80 130 100 130C120 130 140 100 140 100" stroke="#2c5e2e" stroke-width="5"/>
-                                <path d="M70 140C70 140 85 150 100 150C115 150 130 140 130 140" stroke="#2c5e2e" stroke-width="5"/>
-                            </svg>
-                        </div>
-                        <div class="absolute top-3 left-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">Organic</div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-semibold text-gray-800">Organic Tomatoes</h3>
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-sm text-gray-600 ml-1">4.8</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-3">Fresh, juicy tomatoes grown without pesticides. Perfect for salads and cooking.</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-lg font-bold text-green-700">$4.99</span>
-                                <span class="text-sm text-gray-500">/kg</span>
-                            </div>
-                            <button class="btn-primary text-white px-3 py-2 rounded-full">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
-                    <div class="relative">
-                        <div class="h-56 bg-yellow-50 flex items-center justify-center">
-                            <svg class="w-32 h-32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M100 50C120 50 150 70 150 100C150 130 130 150 100 150C70 150 50 130 50 100C50 70 80 50 100 50Z" fill="#FFD54F"/>
-                                <path d="M100 60C115 60 140 75 140 100C140 125 125 140 100 140C75 140 60 125 60 100C60 75 85 60 100 60Z" fill="#FFECB3"/>
-                                <path d="M100 40L100 20" stroke="#795548" stroke-width="4"/>
-                                <path d="M95 45C95 45 85 35 80 25" stroke="#795548" stroke-width="3"/>
-                                <path d="M105 45C105 45 115 35 120 25" stroke="#795548" stroke-width="3"/>
-                            </svg>
-                        </div>
-                        <div class="absolute top-3 left-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full">Best Seller</div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-semibold text-gray-800">Premium Sunflower Seeds</h3>
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-sm text-gray-600 ml-1">4.9</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-3">High-yield sunflower seeds with excellent germination rate. Non-GMO certified.</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-lg font-bold text-green-700">$8.50</span>
-                                <span class="text-sm text-gray-500">/500g</span>
-                            </div>
-                            <button class="btn-primary text-white px-3 py-2 rounded-full">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
-                    <div class="relative">
-                        <div class="h-56 bg-blue-50 flex items-center justify-center">
-                            <svg class="w-32 h-32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="60" y="70" width="80" height="100" rx="5" fill="#90CAF9"/>
-                                <rect x="65" y="75" width="70" height="90" rx="3" fill="#E3F2FD"/>
-                                <path d="M75 85H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 95H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 105H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 115H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 125H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 135H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 145H125" stroke="#1976D2" stroke-width="2"/>
-                                <path d="M75 155H125" stroke="#1976D2" stroke-width="2"/>
-                                <circle cx="100" cy="50" r="20" fill="#4CAF50"/>
-                                <path d="M90 50L97 57L110 44" stroke="white" stroke-width="3"/>
-                            </svg>
-                        </div>
-                        <div class="absolute top-3 left-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">New</div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-semibold text-gray-800">Soil Testing Kit</h3>
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-sm text-gray-600 ml-1">4.7</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-3">Professional soil testing kit with pH, nitrogen, phosphorus and potassium tests.</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-lg font-bold text-green-700">$24.99</span>
-                                <span class="text-sm text-gray-500">/kit</span>
-                            </div>
-                            <button class="btn-primary text-white px-3 py-2 rounded-full">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
-                    <div class="relative">
-                        <div class="h-56 bg-red-50 flex items-center justify-center">
-                            <svg class="w-32 h-32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M100 60C130 60 150 90 150 120C150 150 130 160 100 160C70 160 50 150 50 120C50 90 70 60 100 60Z" fill="#EF9A9A"/>
-                                <path d="M100 70C125 70 140 95 140 120C140 145 125 150 100 150C75 150 60 145 60 120C60 95 75 70 100 70Z" fill="#FFCDD2"/>
-                                <path d="M100 50L100 30" stroke="#795548" stroke-width="4"/>
-                                <path d="M90 55C90 55 80 45 75 35" stroke="#795548" stroke-width="3"/>
-                                <path d="M110 55C110 55 120 45 125 35" stroke="#795548" stroke-width="3"/>
-                            </svg>
-                        </div>
-                        <div class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">Sale</div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-semibold text-gray-800">Organic Strawberries</h3>
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-sm text-gray-600 ml-1">4.6</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-3">Sweet and juicy organic strawberries. Freshly picked from local farms.</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-lg font-bold text-green-700">$5.99</span>
-                                <span class="text-sm text-gray-500">/box</span>
-                            </div>
-                            <button class="btn-primary text-white px-3 py-2 rounded-full">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- All Products -->
     <section class="py-12 bg-gray-50">
         <div class="container mx-auto px-4">
@@ -358,7 +189,7 @@
                             <path d="M45 48C45 48 47 50 50 50C53 50 55 48 55 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">John Thompson</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">randhir kumar</h3>
                     <p class="text-green-700 font-medium mb-3">Organic Vegetables</p>
                     <p class="text-gray-600 text-sm mb-4">Growing organic vegetables for over 15 years using sustainable farming practices.</p>
                     <button class="btn-outline px-4 py-2 rounded-full font-medium">View Products</button>
@@ -375,7 +206,7 @@
                             <path d="M45 48C45 48 47 50 50 50C53 50 55 48 55 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Sarah Miller</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">suraj kumar</h3>
                     <p class="text-green-700 font-medium mb-3">Fruit Orchard</p>
                     <p class="text-gray-600 text-sm mb-4">Third-generation fruit farmer specializing in apples, pears, and berries.</p>
                     <button class="btn-outline px-4 py-2 rounded-full font-medium">View Products</button>
@@ -392,7 +223,7 @@
                             <path d="M45 48C45 48 47 50 50 50C53 50 55 48 55 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Robert Chen</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-1">shubham kumar</h3>
                     <p class="text-green-700 font-medium mb-3">Heirloom Seeds</p>
                     <p class="text-gray-600 text-sm mb-4">Preserving rare and heirloom seed varieties with traditional growing methods.</p>
                     <button class="btn-outline px-4 py-2 rounded-full font-medium">View Products</button>
