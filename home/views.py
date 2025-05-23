@@ -85,10 +85,13 @@ def log_out(request):
 
 def market(request):
     user = request.user
+    cart_items = Cart.objects.filter(user=request.user)
+    total_count = cart_items.count()
     if user.is_authenticated:
         items = MarketItems.objects.all()
         context = {
-            "market_items": items
+            "market_items": items,
+            "total_count" : total_count
         }
         return render(request, "marketplace/market.html", context)
     else:
@@ -122,9 +125,13 @@ def add_to_cart(request, item_id):
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     total_count = cart_items.count()
+    total_price = 0
+    for price in cart_items:
+        total_price += price.items.item_price
     context = {
         'cart_items': cart_items,
         'total_count' : total_count,
+        'total_price' : total_price,
     }
     return render(request, 'marketplace/cart.html', context)
 

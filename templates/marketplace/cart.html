@@ -108,7 +108,7 @@
                                         <p class="text-sm text-gray-500">{{ cart.items.items_description }}</p>
                                     </div>
                                     <div class="mt-2 sm:mt-0">
-                                        <p class="text-lg font-semibold text-green-700">${{ cart.items.item_price }}</p>
+                                        <p class="text-lg font-semibold text-green-700">{{ cart.items.item_price }} rupees</p>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center mt-4">
@@ -141,20 +141,20 @@
                     <h2 class="text-xl font-semibold text-gray-800 mb-6">Order Summary</h2>
                     <div class="space-y-4">
                         <div class="flex justify-between text-gray-600">
-                            <span>Subtotal (6 items)</span>
-                            <span id="subtotal">$22.44</span>
+                            <span>Subtotal ({{total_count}} items)</span>
+                            <span id="subtotal">{{total_price}} rupees</span>
                         </div>
                         <div class="flex justify-between text-gray-600">
                             <span>Shipping</span>
-                            <span>$4.99</span>
+                            <span>0</span>
                         </div>
                         <div class="flex justify-between text-gray-600">
                             <span>Tax</span>
-                            <span>$2.74</span>
+                            <span>0</span>
                         </div>
                         <div class="border-t pt-4 flex justify-between font-semibold text-lg">
                             <span>Total</span>
-                            <span id="total" class="text-green-700">$30.17</span>
+                            <span id="total" class="text-green-700">{{total_price}} rupees</span>
                         </div>
                         
                         <!-- Coupon Code -->
