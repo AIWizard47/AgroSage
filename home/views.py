@@ -121,7 +121,12 @@ def add_to_cart(request, item_id):
 @login_required
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
-    return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
+    total_count = cart_items.count()
+    context = {
+        'cart_items': cart_items,
+        'total_count' : total_count,
+    }
+    return render(request, 'marketplace/cart.html', context)
 
 @login_required
 def remove_from_cart(request, cart_id):
