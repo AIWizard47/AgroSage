@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Check, MarketItems
+from django.contrib.auth.decorators import login_required
+from .models import Check, MarketItems, Cart
 from .groq_ai import ask_ai
 
 # Create your views here.
@@ -83,11 +84,15 @@ def log_out(request):
     return redirect('index')  # Redirect to your homepage or login page
 
 def market(request):
-    items = MarketItems.objects.all()
-    context = {
-        "market_items" : items
-    }
-    return render(request,"marketplace/market.html",context)
+    user = request.user
+    if user.is_authenticated:
+        items = MarketItems.objects.all()
+        context = {
+            "market_items": items
+        }
+        return render(request, "marketplace/market.html", context)
+    else:
+        return redirect("login")  # replace "login" with your login URL name
 
 def farmer_guidance(request):
     ai_response = None
@@ -99,3 +104,27 @@ def farmer_guidance(request):
     return render(request, 'home/farmer_guidance.html', {
         'ai_response': ai_response
     })
+    
+@login_required
+def add_to_cart(request, item_id):
+    item = get_object_or_404(MarketItems, id=item_id)
+    
+    # Check if item is already in the cart
+    if Cart.objects.filter(user=request.user, items=item).exists():
+        # Optionally show a message or redirect with warning
+        return redirect('view_cart')
+
+    # Add item to cart
+    Cart.objects.create(user=request.user, items=item)
+    return redirect('view_cart')
+
+@login_required
+def view_cart(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
+
+@login_required
+def remove_from_cart(request, cart_id):
+    cart_item = get_object_or_404(Cart, id=cart_id, user=request.user)
+    cart_item.delete()
+    return redirect('view_cart')

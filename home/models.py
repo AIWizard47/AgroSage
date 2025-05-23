@@ -15,3 +15,11 @@ class MarketItems(models.Model):
     items_weight = models.IntegerField()
     def __str__(self):
         return self.items_name
+    
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.OneToOneField(MarketItems, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
