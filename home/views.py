@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Check, MarketItems
+from .groq_ai import ask_ai
+
 # Create your views here.
 def index(request):
     is_farmer = False
@@ -86,3 +88,14 @@ def market(request):
         "market_items" : items
     }
     return render(request,"marketplace/market.html",context)
+
+def farmer_guidance(request):
+    ai_response = None
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        if question:
+            ai_response = ask_ai(question)
+
+    return render(request, 'home/farmer_guidance.html', {
+        'ai_response': ai_response
+    })
