@@ -140,3 +140,38 @@ def remove_from_cart(request, cart_id):
     cart_item = get_object_or_404(Cart, id=cart_id, user=request.user)
     cart_item.delete()
     return redirect('view_cart')
+
+@login_required
+def list_item(request):
+    user = request.user
+    try:
+        check = Check.objects.get(user=user)
+        if not check.is_farmer:
+            messages.error(request, "Only farmers can list items.")
+            return redirect("index")  # Or some 'not authorized' page
+    except Check.DoesNotExist:
+        messages.error(request, "Access denied. Farmer status not verified.")
+        return redirect("index")
+
+    if request.method == 'POST':
+        name = request.POST.get('items_name')
+        description = request.POST.get('items_description')
+        price = request.POST.get('item_price')
+        weight = request.POST.get('items_weight')
+        image = request.FILES.get('item_image')
+
+        if name and description and price and weight and image:
+            MarketItems.objects.create(
+                items_name=name,
+                items_description=description,
+                item_price=price,
+                items_weight=weight,
+                item_image=image
+            )
+            messages.success(request, "Item listed successfully!")
+            return redirect('market')  # Redirect to marketplace
+        else:
+            messages.error(request, "All fields are required.")
+
+    return render(request, "marketplace/list_items.html")
+    

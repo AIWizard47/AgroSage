@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer's Market Listing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f7f9f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .header-bg {
+            background-color: #4d7c0f;
+        }
+        .btn-primary {
+            background-color: #4d7c0f;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #3f6212;
+            transform: translateY(-2px);
+        }
+        .preview-card {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .listing-card {
+            transition: all 0.3s ease;
+        }
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="header-bg text-white py-6">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <h1 class="text-2xl font-bold">Farmer's Market</h1>
+                    </div>
+                    <nav>
+                        <ul class="flex space-x-6">
+                            <li><a href="#" class="hover:underline">Home</a></li>
+                            <li><a href="#" class="hover:underline">Market</a></li>
+                            <li><a href="#" class="hover:underline font-bold">List Crops</a></li>
+                            <li><a href="#" class="hover:underline">My Account</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-10">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">List Your Crops</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Form Section -->
+                    <div class="lg:col-span-2">
+                        <div class="form-container p-6">
+                            <form id="cropListingForm" class="space-y-6" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div>
+                                    <label for="items_name" class="block text-sm font-medium text-gray-700 mb-1">Crop Name</label>
+                                    <input type="text" id="items_name" name="items_name" required 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                                </div>
+                                
+                                <div>
+                                    <label for="items_description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea id="items_description" name="items_description" rows="4" required
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-lime-500 focus:border-lime-500"
+                                        placeholder="Describe your crop, its quality, freshness, etc."></textarea>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="item_price" class="block text-sm font-medium text-gray-700 mb-1">Price (per unit)</label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500">$</span>
+                                            </div>
+                                            <input type="number" id="item_price" name="item_price" min="0" required
+                                                class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="items_weight" class="block text-sm font-medium text-gray-700 mb-1">Weight (in kg)</label>
+                                        <input type="number" id="items_weight" name="items_weight" min="0" required
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-lime-500 focus:border-lime-500">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="item_image" class="block text-sm font-medium text-gray-700 mb-1">Crop Image</label>
+                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                        <div class="space-y-1 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <div class="flex text-sm text-gray-600">
+                                                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-lime-600 hover:text-lime-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-lime-500">
+                                                    <span>Upload a file</span>
+                                                    <input id="file-upload" name="item_image" type="file" class="sr-only" accept="image/*">
+                                                </label>
+                                                <p class="pl-1">or drag and drop</p>
+                                            </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                        </div>
+                                    </div>
+                                    <div id="image-preview" class="mt-2 hidden">
+                                        <img id="preview-img" src="" alt="Preview" class="h-32 object-cover rounded-md">
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-end">
+                                    <button type="submit" class="btn-primary text-white px-6 py-2 rounded-md font-medium">
+                                        List Crop
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Preview Section -->
+                    <div class="lg:col-span-1">
+                        <div class="preview-card p-4 rounded-lg bg-white h-full">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">Listing Preview</h3>
+                            <div id="preview-content" class="text-gray-500 text-center py-8">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                                </svg>
+                                <p class="mt-2">Fill out the form to see a preview of your listing</p>
+                            </div>
+                            <div id="listing-preview" class="hidden">
+                                <div class="listing-card bg-white rounded-lg overflow-hidden shadow-md">
+                                    <div class="h-40 bg-gray-200 relative">
+                                        <img id="preview-card-img" src="" alt="Crop" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="p-4">
+                                        <h4 id="preview-name" class="text-lg font-semibold text-gray-800"></h4>
+                                        <p id="preview-description" class="text-sm text-gray-600 mt-1 line-clamp-2"></p>
+                                        <div class="flex justify-between items-center mt-3">
+                                            <span id="preview-price" class="text-lime-600 font-bold"></span>
+                                            <span id="preview-weight" class="text-gray-500 text-sm"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Listings Section -->
+                
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-16">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Farmer's Market</h4>
+                        <p class="text-gray-400">Connecting farmers directly with consumers for fresher produce and fair prices.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-white">Home</a></li>
+                            <li><a href="#" class="hover:text-white">Browse Market</a></li>
+                            <li><a href="#" class="hover:text-white">List Your Crops</a></li>
+                            <li><a href="#" class="hover:text-white">About Us</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>Email: info@farmersmarket.com</li>
+                            <li>Phone: (123) 456-7890</li>
+                            <li>Address: 123 Farm Road, Harvest City</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                    <p>&copy; 2023 Farmer's Market. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Handle image upload preview
+        const fileUpload = document.getElementById('file-upload');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+        const previewCardImg = document.getElementById('preview-card-img');
+        
+        fileUpload.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const url = URL.createObjectURL(file);
+                previewImg.src = url;
+                previewCardImg.src = url;
+                imagePreview.classList.remove('hidden');
+                updatePreview();
+            }
+        });
+        
+        // Handle form input for live preview
+        const form = document.getElementById('cropListingForm');
+        const nameInput = document.getElementById('items_name');
+        const descInput = document.getElementById('items_description');
+        const priceInput = document.getElementById('item_price');
+        const weightInput = document.getElementById('items_weight');
+        
+        const previewContent = document.getElementById('preview-content');
+        const listingPreview = document.getElementById('listing-preview');
+        const previewName = document.getElementById('preview-name');
+        const previewDesc = document.getElementById('preview-description');
+        const previewPrice = document.getElementById('preview-price');
+        const previewWeight = document.getElementById('preview-weight');
+        
+        // Update preview when any input changes
+        [nameInput, descInput, priceInput, weightInput].forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+        
+        function updatePreview() {
+            // Only show preview if at least name is filled
+            if (nameInput.value.trim() !== '') {
+                previewContent.classList.add('hidden');
+                listingPreview.classList.remove('hidden');
+                
+                previewName.textContent = nameInput.value;
+                previewDesc.textContent = descInput.value;
+                previewPrice.textContent = priceInput.value ? `$${priceInput.value}` : '';
+                previewWeight.textContent = weightInput.value ? `${weightInput.value} kg` : '';
+            } else {
+                previewContent.classList.remove('hidden');
+                listingPreview.classList.add('hidden');
+            }
+        }
+        
+        // Handle form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                return;
+            }
+            
+            // Create a new listing card
+            const listingsContainer = document.getElementById('listings-container');
+            const newListing = document.createElement('div');
+            newListing.className = 'listing-card bg-white rounded-lg overflow-hidden shadow-md';
+            
+            // Get image URL or use placeholder
+            let imageUrl = previewCardImg.src || 'https://via.placeholder.com/300x200?text=No+Image';
+            
+            newListing.innerHTML = `
+                <div class="h-40 bg-gray-200">
+                    <img src="${imageUrl}" alt="${nameInput.value}" class="w-full h-full object-cover">
+                </div>
+                <div class="p-4">
+                    <h4 class="text-lg font-semibold text-gray-800">${nameInput.value}</h4>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">${descInput.value}</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-lime-600 font-bold">$${priceInput.value}</span>
+                        <span class="text-gray-500 text-sm">${weightInput.value} kg</span>
+                    </div>
+                </div>
+            `;
+            
+            // Add to the beginning of the listings
+            if (listingsContainer.firstChild) {
+                listingsContainer.insertBefore(newListing, listingsContainer.firstChild);
+            } else {
+                listingsContainer.appendChild(newListing);
+            }
+            
+            // Show success message
+            const successAlert = document.createElement('div');
+            successAlert.className = 'fixed top-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md transition-opacity duration-500';
+            successAlert.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <p>Crop listing successfully added!</p>
+                </div>
+            `;
+            document.body.appendChild(successAlert);
+            
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                successAlert.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(successAlert);
+                }, 500);
+            }, 3000);
+            
+            // Reset form
+            form.reset();
+            imagePreview.classList.add('hidden');
+            updatePreview();
+        });
+    
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94474f3292eac17c',t:'MTc0ODAzMjIwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
