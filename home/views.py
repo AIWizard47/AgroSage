@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Check
+from .models import Check, MarketItems
 # Create your views here.
 def index(request):
     is_farmer = False
@@ -81,4 +81,8 @@ def log_out(request):
     return redirect('index')  # Redirect to your homepage or login page
 
 def market(request):
-    return render(request,"marketplace/market.html")
+    items = MarketItems.objects.all()
+    context = {
+        "market_items" : items
+    }
+    return render(request,"marketplace/market.html",context)
