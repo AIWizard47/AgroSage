@@ -277,13 +277,29 @@
                 <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight text-gray-800">
                     Growing <span class="text-green-600">Smarter</span>, Harvesting <span class="text-blue-500">Better</span>
                 </h1>
-                <p class="text-lg text-gray-600 mb-8">
-                    AgroSage brings modern solutions to traditional farming. Increase your yield, reduce costs, and farm sustainably with our expert guidance and tools.
-                </p>
+                
+                {% if user.is_authenticated %}
+                    
+                    {% if is_farmer %}
+                        <p class="text-lg text-gray-600 mb-8">
+                            AgroSage brings modern solutions to traditional farming. Increase your yield, reduce costs, and farm sustainably with our expert guidance and tools.
+                        </p>
+                    {% elif is_vendor %}
+                        <p class="text-lg text-gray-600 mb-8">
+                            AgroSage empowers vendors with modern agricultural solutions. Connect with farmers, offer smarter tools, and grow your business with our expert-backed platform.
+                        </p>
+                    
+                    {% endif %}
+                {% else %}
+                        <p class="text-lg text-gray-600 mb-8">
+                            AgroSage brings modern solutions to traditional farming. Increase your yield, reduce costs, and farm sustainably with our expert guidance and tools.
+                        </p>
+                {% endif %}
+                    
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                   {% if user.is_authenticated %}
                     {% if is_farmer %}
-                      <button class="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg">
+                      <button class="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg" onclick="window.location.href='{% url 'farmer_dashboard' %}'">
                                           Farmer
                       </button>
                     {% elif is_vendor %}
@@ -651,7 +667,7 @@
             </div>
         </div>
     </footer>
-
+    
     <script>
         // Mobile menu toggle
         document.addEventListener('DOMContentLoaded', function() {

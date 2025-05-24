@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Plant Search</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-green-50 min-h-screen py-10">
+  <div class="max-w-4xl mx-auto px-4">
+    <h1 class="text-3xl font-bold text-green-700 mb-6 text-center">🌿 Plant Finder for Farmers</h1>
+
+    <form method="get" class="mb-8 flex justify-center">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search for fruits, vegetables..." class="w-full max-w-md px-4 py-2 border rounded-l-md">
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-r-md hover:bg-green-700">Search</button>
+    </form>
+
+    {% if plants %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for plant in plants %}
+          <div class="bg-white shadow rounded-lg p-4 flex flex-col">
+            <h2 class="text-lg font-semibold text-green-800">{{ plant.common_name|default:"No Common Name" }}</h2>
+            <p class="text-sm text-gray-600 italic mb-2">{{ plant.scientific_name }}</p>
+            {% if plant.image_url %}
+              <img src="{{ plant.image_url }}" alt="{{ plant.common_name }}" class="w-full h-48 object-cover rounded-md mb-2">
+            {% endif %}
+            <a href="https://trefle.io/plants/{{ plant.slug }}" target="_blank" class="text-green-600 text-sm underline mt-auto">More info</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% elif query %}
+      <p class="text-center text-red-500">No plants found for "{{ query }}"</p>
+    {% endif %}
+  </div>
+</body>
+</html>

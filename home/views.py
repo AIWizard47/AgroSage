@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Check, MarketItems, Cart
 from .groq_ai import ask_ai
+import requests
 
 # Create your views here.
 def index(request):
@@ -175,3 +176,33 @@ def list_item(request):
 
     return render(request, "marketplace/list_items.html")
     
+
+def farmer_dashboard(request):
+    user = request.user
+    context = {
+        "name" : user.first_name
+    }
+    return render(request,"home/farmer_dashboard.html",context)
+
+
+
+TREFLE_API_TOKEN = 'OhBkdYoPLnwI-HstvgN1ZTnevZfho_C3morAMbbiLSc'
+
+def plant_search(request):
+    query = request.GET.get('q', '')
+    plants = []
+
+    if query:
+        url = f'https://trefle.io/api/v1/plants?token=${TREFLE_API_TOKEN}'
+        response = requests.get(url, params={
+            'token': TREFLE_API_TOKEN,
+            'q': query
+        })
+        if response.status_code == 200:
+            data = response.json()
+            plants = data.get('data', [])
+
+    return render(request, 'home/plant_search.html', {
+        'plants': plants,
+        'query': query
+    })

@@ -1,0 +1,1866 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farm Management Dashboard</title>
+    <meta name="description" content="Comprehensive Farm Management Platform" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary-color: #2e7d32;
+        --primary-light: #60ad5e;
+        --primary-dark: #005005;
+        --secondary-color: #81c784;
+        --accent-color: #ffeb3b;
+        --text-color: #263238;
+        --bg-color: #f5f7fa;
+        --card-bg: #ffffff;
+        --danger: #d32f2f;
+        --warning: #f57c00;
+        --success: #388e3c;
+        --info: #0288d1;
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      
+      h1, h2, h3, h4, h5 {
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .app-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      .header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        border-radius: 0 0 1.5rem 1.5rem;
+        padding: 1.5rem;
+        color: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+        transform: rotate(30deg);
+      }
+      
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      
+      .farm-select-search {
+        flex: 1;
+        max-width: 500px;
+      }
+      
+      .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 0.75rem;
+        padding: 0.5rem 1rem;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+      }
+      
+      .search-container:focus-within {
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+      }
+      
+      .search-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: white;
+        margin-right: 0.5rem;
+      }
+      
+      .search-input {
+        background: transparent;
+        border: none;
+        color: white;
+        width: 100%;
+        font-size: 0.95rem;
+        outline: none;
+      }
+      
+      .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      
+      .header-actions {
+        display: flex;
+        gap: 1rem;
+      }
+      
+      .add-farm-button {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .add-farm-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+      }
+      
+      .welcome-section {
+        padding: 1rem 0;
+      }
+      
+      .welcome-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .hand-wave {
+        display: inline-block;
+        font-size: 1.5rem;
+      }
+      
+      .welcome-text {
+        font-size: 1rem;
+        opacity: 0.9;
+        max-width: 600px;
+      }
+      
+      .main-content {
+        padding: 2rem 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      @media (min-width: 1024px) {
+        .main-content {
+          grid-template-columns: 2fr 1fr;
+        }
+      }
+      
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      
+      .icon-container {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .weather-icon-container {
+        background-color: #bbdefb;
+        color: #1565c0;
+      }
+      
+      .section-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      
+      .section-actions {
+        display: flex;
+        gap: 0.75rem;
+      }
+      
+      .primary-button, .secondary-button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .primary-button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+      }
+      
+      .primary-button:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .secondary-button {
+        background-color: transparent;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+      }
+      
+      .secondary-button:hover {
+        background-color: rgba(46, 125, 50, 0.1);
+        transform: translateY(-2px);
+      }
+      
+      .weather-section, .crop-section, .budget-section, .tasks-section, .map-section {
+        background-color: var(--card-bg);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .weather-section:hover, .crop-section:hover, .budget-section:hover, .tasks-section:hover, .map-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      }
+      
+      .weather-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      @media (min-width: 768px) {
+        .weather-content {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      
+      .weather-details {
+        background: linear-gradient(135deg, #42a5f5, #1976d2);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .weather-details::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M45.1,-76.5C59.2,-69.7,71.8,-59.2,79.6,-45.6C87.4,-32,90.4,-16,89.6,-0.5C88.8,15.1,84.2,30.1,76.1,43.1C68.1,56.1,56.6,67,43.1,74.4C29.6,81.8,14.8,85.7,-0.2,86C-15.2,86.3,-30.4,83,-43.5,75.6C-56.6,68.2,-67.6,56.6,-75.1,43.1C-82.6,29.6,-86.6,14.8,-86.2,0.2C-85.8,-14.3,-81,-28.6,-73.4,-41.8C-65.8,-55,-55.4,-67,-42.8,-73.8C-30.1,-80.5,-15.1,-82,0.6,-83C16.2,-84,32.5,-84.5,45.1,-76.5Z' transform='translate(100 100)'/%3E%3C/svg%3E") no-repeat center center;
+        background-size: cover;
+        opacity: 0.1;
+      }
+      
+      .weather-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .day {
+        font-weight: 600;
+        margin: 0;
+      }
+      
+      .date {
+        opacity: 0.8;
+        margin: 0;
+      }
+      
+      .location {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .location-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        background-color: #ffeb3b;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(255, 235, 59, 0.8);
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.5);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      
+      .weather-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .weather-stat-item {
+        text-align: center;
+      }
+      
+      .stat-emoji {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      
+      .stat-text, .stat-label {
+        font-size: 0.875rem;
+        opacity: 0.9;
+      }
+      
+      .weather-forecast {
+        background-color: #f8fafc;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .forecast-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #334155;
+      }
+      
+      .forecast-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 1rem;
+      }
+      
+      .forecast-item {
+        text-align: center;
+        padding: 0.75rem;
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+      }
+      
+      .forecast-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .forecast-day {
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #475569;
+      }
+      
+      .forecast-emoji {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .forecast-temp {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #334155;
+      }
+      
+      .crop-section, .map-section {
+        grid-column: 1 / -1;
+      }
+      
+      .crop-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      .crop-card {
+        background-color: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .crop-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+      
+      .crop-image {
+        height: 160px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+      
+      .crop-image::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40%;
+        background: linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0));
+      }
+      
+      .crop-details {
+        padding: 1.25rem;
+      }
+      
+      .crop-name {
+        font-weight: 600;
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+        color: #1e293b;
+      }
+      
+      .crop-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+      
+      .crop-info-item {
+        text-align: center;
+      }
+      
+      .info-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-bottom: 0.25rem;
+      }
+      
+      .info-value {
+        font-weight: 500;
+        color: #334155;
+      }
+      
+      .crop-progress {
+        margin-top: 1rem;
+      }
+      
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        color: #475569;
+      }
+      
+      .progress-bar {
+        height: 0.5rem;
+        background-color: #e2e8f0;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+      
+      .progress-fill {
+        height: 100%;
+        border-radius: 1rem;
+        transition: width 1s ease-in-out;
+      }
+      
+      .budget-section, .tasks-section {
+        height: fit-content;
+      }
+      
+      .budget-content, .tasks-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      
+      .budget-card {
+        background-color: #f8fafc;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        border: 1px solid #e2e8f0;
+        transition: transform 0.2s ease;
+      }
+      
+      .budget-card:hover {
+        transform: translateY(-4px);
+      }
+      
+      .budget-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      
+      .budget-title {
+        font-weight: 600;
+        color: #334155;
+      }
+      
+      .budget-amount {
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #0f172a;
+      }
+      
+      .budget-chart {
+        height: 180px;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+      
+      .chart-bars {
+        display: flex;
+        align-items: flex-end;
+        height: 150px;
+        gap: 0.5rem;
+      }
+      
+      .chart-bar {
+        flex: 1;
+        background-color: #e2e8f0;
+        border-radius: 0.25rem 0.25rem 0 0;
+        position: relative;
+      }
+      
+      .chart-bar-fill {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-radius: 0.25rem 0.25rem 0 0;
+        transition: height 1s ease-in-out;
+      }
+      
+      .chart-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+      }
+      
+      .chart-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-align: center;
+        flex: 1;
+      }
+      
+      .budget-legend {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #475569;
+      }
+      
+      .legend-color {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+      }
+      
+      .task-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: #f8fafc;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .task-item:hover {
+        background-color: #f1f5f9;
+        transform: translateX(4px);
+      }
+      
+      .task-checkbox {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        border: 2px solid #cbd5e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+      
+      .task-checkbox:hover {
+        border-color: var(--primary-color);
+        transform: scale(1.1);
+      }
+      
+      .task-checkbox.checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      
+      .task-checkbox.checked::after {
+        content: "✓";
+        color: white;
+        font-size: 0.75rem;
+      }
+      
+      .task-content {
+        flex: 1;
+      }
+      
+      .task-title {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: #334155;
+        transition: all 0.2s ease;
+      }
+      
+      .task-due {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+      
+      .task-priority {
+        padding: 0.25rem 0.5rem;
+        border-radius: 1rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+      
+      .priority-high {
+        background-color: #fee2e2;
+        color: #b91c1c;
+      }
+      
+      .priority-medium {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      
+      .priority-low {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      
+      .map-container {
+        height: 400px;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .map {
+        width: 100%;
+        height: 100%;
+        background-color: #e2e8f0;
+      }
+      
+      .map-overlay {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+      }
+      
+      .map-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .map-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        color: #475569;
+      }
+      
+      .map-legend-color {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 2px;
+      }
+      
+      .map-controls {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+      }
+      
+      .map-control-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      
+      .map-control-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      
+      .map-control-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #475569;
+      }
+      
+      .field-marker {
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        background-color: rgba(46, 125, 50, 0.8);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 5;
+      }
+      
+      .field-marker:hover {
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+      
+      .field-marker.wheat {
+        background-color: rgba(46, 125, 50, 0.8);
+      }
+      
+      .field-marker.corn {
+        background-color: rgba(255, 179, 0, 0.8);
+      }
+      
+      .field-marker.soybeans {
+        background-color: rgba(46, 125, 50, 0.8);
+      }
+      
+      .field-marker.cotton {
+        background-color: rgba(156, 39, 176, 0.8);
+      }
+      
+      .field-tooltip {
+        position: absolute;
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 200px;
+        z-index: 20;
+        display: none;
+      }
+      
+      .field-tooltip.active {
+        display: block;
+      }
+      
+      .tooltip-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #1e293b;
+      }
+      
+      .tooltip-info {
+        font-size: 0.875rem;
+        color: #475569;
+      }
+      
+      .tooltip-progress {
+        margin-top: 0.5rem;
+      }
+      
+      /* Weather alert modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .modal {
+        background-color: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 500px;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+      
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      
+      .modal-title {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #1e293b;
+      }
+      
+      .modal-close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #64748b;
+        transition: color 0.2s ease;
+      }
+      
+      .modal-close:hover {
+        color: #1e293b;
+      }
+      
+      .modal-body {
+        margin-bottom: 1.5rem;
+      }
+      
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #334155;
+      }
+      
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease;
+      }
+      
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+      }
+      
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+      }
+      
+      /* Animations */
+      .animate-slide-up {
+        animation: slideUp 0.6s ease-out;
+      }
+      
+      .animate-slide-right {
+        animation: slideRight 0.6s ease-out;
+      }
+      
+      .animate-slide-left {
+        animation: slideLeft 0.6s ease-out;
+      }
+      
+      .animate-fade-in {
+        animation: fadeIn 0.8s ease-out;
+      }
+      
+      .animate-bounce-gentle {
+        animation: bounceGentle 2s infinite;
+      }
+      
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideRight {
+        from {
+          transform: translateX(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideLeft {
+        from {
+          transform: translateX(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      @keyframes bounceGentle {
+        0%, 100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(15deg);
+        }
+        75% {
+          transform: rotate(-10deg);
+        }
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .header-top {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 1rem;
+        }
+        
+        .farm-select-search {
+          max-width: 100%;
+        }
+        
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .weather-header {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        
+        .weather-stats {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .map-container {
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-container">
+      <header class="header animate-slide-up">
+        <div class="header-container">
+          <div class="header-top">
+            <div class="farm-select-search">              
+              <div class="search-container">
+                <svg class="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search crops, tasks, or insights..."
+                  class="search-input"
+                />
+              </div>
+            </div>
+            
+            <div class="header-actions">
+              <button class="add-farm-button" id="addProductBtn" onclick="window.location.href='{%url 'list_item' %}'">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                ADD Product
+              </button>
+              <button class="add-farm-button" id="guidanceBtn" onclick="window.location.href='{%url 'farmer_guidance' %}'">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Guidance
+              </button>
+            </div>
+          </div>
+          
+          <div class="welcome-section animate-fade-in">
+            <h1 class="welcome-title">
+              Welcome Farmer {{name}}! 
+              <span class="hand-wave animate-bounce-gentle">👋</span>
+            </h1>
+            <p class="welcome-text">
+              Here's your farm's daily overview at a glance - track weather updates, crop details, and budget insights, all in one place!
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <!-- Weather Section -->
+        <section class="weather-section animate-slide-right">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-container weather-icon-container">
+                <svg class="section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.4 4.4 0 003 15z" />
+                </svg>
+              </div>
+              <h2>Weather Recommendations</h2>
+            </div>
+            
+            <div class="section-actions">
+              <button class="secondary-button" id="fullWeatherBtn">
+                Full weather report →
+              </button>
+              <button class="primary-button weather-button" id="weatherAlertBtn">
+                + Set new Alerts
+              </button>
+            </div>
+          </div>
+          
+          <div class="weather-content">
+            <div class="weather-details">
+              <div class="weather-header">
+                <div>
+                  <p class="day">SATURDAY</p>
+                  <p class="date">02-Nov-2024</p>
+                </div>
+                <div class="location">
+                  <div class="location-dot"></div>
+                  <span>Sagarnagar</span>
+                </div>
+              </div>
+              
+              <div class="weather-stats">
+                <div class="weather-stat-item">
+                  <div class="stat-emoji">☁️</div>
+                  <div class="stat-text">Mostly Cloudy</div>
+                </div>
+                
+                <div class="weather-stat-item">
+                  <div class="stat-value">26°</div>
+                  <div class="stat-label">Temperature</div>
+                </div>
+                
+                <div class="weather-stat-item">
+                  <div class="stat-value">68%</div>
+                  <div class="stat-label">Humidity</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="weather-forecast">
+              <h3 class="forecast-title">5-Day Forecast</h3>
+              <div class="forecast-items">
+                <div class="forecast-item">
+                  <div class="forecast-day">SUN</div>
+                  <div class="forecast-emoji">☀️</div>
+                  <div class="forecast-temp">28°</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day">MON</div>
+                  <div class="forecast-emoji">🌤️</div>
+                  <div class="forecast-temp">27°</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day">TUE</div>
+                  <div class="forecast-emoji">🌧️</div>
+                  <div class="forecast-temp">24°</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day">WED</div>
+                  <div class="forecast-emoji">🌧️</div>
+                  <div class="forecast-temp">23°</div>
+                </div>
+                <div class="forecast-item">
+                  <div class="forecast-day">THU</div>
+                  <div class="forecast-emoji">⛅</div>
+                  <div class="forecast-temp">25°</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tasks Section -->
+        <section class="tasks-section animate-slide-left">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-container" style="background-color: #e8f5e9; color: #2e7d32;">
+                <svg class="section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <h2>Today's Tasks</h2>
+            </div>
+            
+            <div class="section-actions">
+              <button class="primary-button" id="addTaskBtn">
+                + Add Task
+              </button>
+            </div>
+          </div>
+          
+          <div class="tasks-content">
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTaskComplete(this)"></div>
+              <div class="task-content">
+                <div class="task-title">Irrigate wheat field</div>
+                <div class="task-due" data-original="Due today at 8:00 AM">Due today at 8:00 AM</div>
+              </div>
+              <div class="task-priority priority-high">High</div>
+            </div>
+            
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTaskComplete(this)"></div>
+              <div class="task-content">
+                <div class="task-title">Apply fertilizer to corn</div>
+                <div class="task-due" data-original="Due today at 10:00 AM">Due today at 10:00 AM</div>
+              </div>
+              <div class="task-priority priority-medium">Medium</div>
+            </div>
+            
+            <div class="task-item">
+              <div class="task-checkbox checked" onclick="toggleTaskComplete(this)"></div>
+              <div class="task-content">
+                <div class="task-title" style="text-decoration: line-through; opacity: 0.7;">Check soil moisture</div>
+                <div class="task-due" data-original="Due today at 6:30 AM">Completed at 6:30 AM</div>
+              </div>
+              <div class="task-priority priority-low">Low</div>
+            </div>
+            
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTaskComplete(this)"></div>
+              <div class="task-content">
+                <div class="task-title">Order new seeds</div>
+                <div class="task-due" data-original="Due today at 4:00 PM">Due today at 4:00 PM</div>
+              </div>
+              <div class="task-priority priority-medium">Medium</div>
+            </div>
+            
+            <div class="task-item">
+              <div class="task-checkbox" onclick="toggleTaskComplete(this)"></div>
+              <div class="task-content">
+                <div class="task-title">Check irrigation system</div>
+                <div class="task-due" data-original="Due today at 2:00 PM">Due today at 2:00 PM</div>
+              </div>
+              <div class="task-priority priority-high">High</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="map-section animate-slide-right">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-container" style="background-color: #e3f2fd; color: #1565c0;">
+                <svg class="section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+              </div>
+              <h2>Farm Map</h2>
+            </div>
+            
+            <div class="section-actions">
+              <button class="secondary-button" id="mapLayersBtn">
+                Change Layers
+              </button>
+              <button class="primary-button" id="fullMapBtn">
+                Full Map View
+              </button>
+            </div>
+          </div>
+          
+          <div class="map-container">
+            <!-- SVG Map -->
+            <div class="map">
+              <svg width="100%" height="100%" viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background -->
+                <rect width="1000" height="400" fill="#e2e8f0" />
+                
+                <!-- Farm land base -->
+                <path d="M50,50 L950,50 L950,350 L50,350 Z" fill="#d1fae5" stroke="#047857" stroke-width="2" />
+                
+                <!-- Roads -->
+                <path d="M500,50 L500,350" stroke="#94a3b8" stroke-width="8" />
+                <path d="M50,200 L950,200" stroke="#94a3b8" stroke-width="8" />
+                
+                <!-- Water body -->
+                <path d="M700,250 C750,230 800,280 850,250 C900,220 900,300 850,320 C800,340 750,290 700,310 C650,330 650,270 700,250 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2" />
+                
+                <!-- Fields -->
+                <path class="field wheat-field" d="M100,100 L400,100 L400,180 L100,180 Z" fill="#bbf7d0" stroke="#16a34a" stroke-width="2" />
+                <path class="field corn-field" d="M100,220 L400,220 L400,300 L100,300 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2" />
+                <path class="field soybean-field" d="M600,100 L900,100 L900,180 L600,180 Z" fill="#d9f99d" stroke="#4d7c0f" stroke-width="2" />
+                <path class="field cotton-field" d="M550,220 L650,220 L650,300 L550,300 Z" fill="#e9d5ff" stroke="#7e22ce" stroke-width="2" />
+                
+                <!-- Buildings -->
+                <rect x="450" y="120" width="100" height="60" fill="#fecaca" stroke="#b91c1c" stroke-width="2" />
+                <rect x="470" y="140" width="20" height="40" fill="#7f1d1d" />
+                <path d="M450,120 L500,90 L550,120" fill="#ef4444" stroke="#b91c1c" stroke-width="2" />
+                
+                <!-- Trees -->
+                <circle cx="420" cy="130" r="15" fill="#22c55e" />
+                <circle cx="580" cy="130" r="15" fill="#22c55e" />
+                <circle cx="420" cy="270" r="15" fill="#22c55e" />
+                <circle cx="580" cy="270" r="15" fill="#22c55e" />
+                
+                <!-- Compass -->
+                <circle cx="900" cy="80" r="20" fill="white" stroke="#475569" stroke-width="2" />
+                <path d="M900,60 L900,100" stroke="#475569" stroke-width="2" />
+                <path d="M880,80 L920,80" stroke="#475569" stroke-width="2" />
+                <text x="900" y="65" text-anchor="middle" fill="#475569" font-size="12" font-weight="bold">N</text>
+                <text x="915" y="83" text-anchor="middle" fill="#475569" font-size="12" font-weight="bold">E</text>
+                <text x="900" y="98" text-anchor="middle" fill="#475569" font-size="12" font-weight="bold">S</text>
+                <text x="885" y="83" text-anchor="middle" fill="#475569" font-size="12" font-weight="bold">W</text>
+              </svg>
+              
+              <!-- Field Markers -->
+              <div class="field-marker wheat" style="top: 140px; left: 250px;" data-field="wheat">W</div>
+              <div class="field-marker corn" style="top: 260px; left: 250px;" data-field="corn">C</div>
+              <div class="field-marker soybeans" style="top: 140px; left: 750px;" data-field="soybeans">S</div>
+              <div class="field-marker cotton" style="top: 260px; left: 600px;" data-field="cotton">CT</div>
+              
+              <!-- Field Tooltips -->
+              <div class="field-tooltip" id="wheat-tooltip">
+                <h4 class="tooltip-title">Wheat Field</h4>
+                <div class="tooltip-info">
+                  <p>Area: 5 acres</p>
+                  <p>Planted: Sep 15</p>
+                  <p>Status: Growing</p>
+                </div>
+                <div class="tooltip-progress">
+                  <div class="progress-label">
+                    <span>Growth</span>
+                    <span>45%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%; background-color: #2e7d32;"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="field-tooltip" id="corn-tooltip">
+                <h4 class="tooltip-title">Corn Field</h4>
+                <div class="tooltip-info">
+                  <p>Area: 3 acres</p>
+                  <p>Planted: Aug 20</p>
+                  <p>Status: Growing</p>
+                </div>
+                <div class="tooltip-progress">
+                  <div class="progress-label">
+                    <span>Growth</span>
+                    <span>70%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%; background-color: #ffb300;"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="field-tooltip" id="soybeans-tooltip">
+                <h4 class="tooltip-title">Soybeans Field</h4>
+                <div class="tooltip-info">
+                  <p>Area: 4 acres</p>
+                  <p>Planted: Oct 5</p>
+                  <p>Status: Growing</p>
+                </div>
+                <div class="tooltip-progress">
+                  <div class="progress-label">
+                    <span>Growth</span>
+                    <span>30%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%; background-color: #2e7d32;"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="field-tooltip" id="cotton-tooltip">
+                <h4 class="tooltip-title">Cotton Field</h4>
+                <div class="tooltip-info">
+                  <p>Area: 2 acres</p>
+                  <p>Planted: Jul 10</p>
+                  <p>Status: Growing</p>
+                </div>
+                <div class="tooltip-progress">
+                  <div class="progress-label">
+                    <span>Growth</span>
+                    <span>85%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%; background-color: #9c27b0;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="map-overlay">
+              <div class="map-legend">
+                <div class="map-legend-item">
+                  <div class="map-legend-color" style="background-color: #bbf7d0;"></div>
+                  <span>Wheat</span>
+                </div>
+                <div class="map-legend-item">
+                  <div class="map-legend-color" style="background-color: #fef08a;"></div>
+                  <span>Corn</span>
+                </div>
+                <div class="map-legend-item">
+                  <div class="map-legend-color" style="background-color: #d9f99d;"></div>
+                  <span>Soybeans</span>
+                </div>
+                <div class="map-legend-item">
+                  <div class="map-legend-color" style="background-color: #e9d5ff;"></div>
+                  <span>Cotton</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="map-controls">
+              <div class="map-control-button" id="zoomInBtn">
+                <svg class="map-control-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+              <div class="map-control-button" id="zoomOutBtn">
+                <svg class="map-control-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                </svg>
+              </div>
+              <div class="map-control-button" id="resetMapBtn">
+                <svg class="map-control-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Crop Section -->
+        <section class="crop-section animate-slide-right">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-container" style="background-color: #e3f2fd; color: #1565c0;">
+                <svg class="section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
+              </div>
+              <h2>Crop Management</h2>
+            </div>
+            
+            <div class="section-actions">
+              <button class="secondary-button" id="viewAllCropsBtn">
+                View all crops →
+              </button>
+              <button class="primary-button" id="addCropBtn">
+                + Add new crop
+              </button>
+            </div>
+          </div>
+          
+          <div class="crop-content">
+            <div class="crop-card">
+              <div class="crop-image" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23f0f9e8\'/><path d=\'M50,20 C60,40 80,50 80,70 C80,85 65,95 50,95 C35,95 20,85 20,70 C20,50 40,40 50,20 Z\' fill=\'%2381c784\'/><path d=\'M50,20 C45,35 35,45 35,60 C35,70 42,75 50,75 C58,75 65,70 65,60 C65,45 55,35 50,20 Z\' fill=\'%232e7d32\'/></svg>');"></div>
+              <div class="crop-details">
+                <h3 class="crop-name">Wheat</h3>
+                <div class="crop-info">
+                  <div class="crop-info-item">
+                    <div class="info-label">Area</div>
+                    <div class="info-value">5 acres</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Planted</div>
+                    <div class="info-value">Sep 15</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Harvest</div>
+                    <div class="info-value">Mar 10</div>
+                  </div>
+                </div>
+                <div class="crop-progress">
+                  <div class="progress-label">
+                    <span>Growth Progress</span>
+                    <span>45%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%; background-color: #2e7d32;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="crop-card">
+              <div class="crop-image" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23fff8e1\'/><path d=\'M50,20 C65,30 75,45 75,65 C75,80 65,90 50,90 C35,90 25,80 25,65 C25,45 35,30 50,20 Z\' fill=\'%23ffd54f\'/><path d=\'M50,30 C55,35 60,45 60,55 C60,65 55,70 50,70 C45,70 40,65 40,55 C40,45 45,35 50,30 Z\' fill=\'%23ffb300\'/></svg>');"></div>
+              <div class="crop-details">
+                <h3 class="crop-name">Corn</h3>
+                <div class="crop-info">
+                  <div class="crop-info-item">
+                    <div class="info-label">Area</div>
+                    <div class="info-value">3 acres</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Planted</div>
+                    <div class="info-value">Aug 20</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Harvest</div>
+                    <div class="info-value">Dec 15</div>
+                  </div>
+                </div>
+                <div class="crop-progress">
+                  <div class="progress-label">
+                    <span>Growth Progress</span>
+                    <span>70%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%; background-color: #ffb300;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="crop-card">
+              <div class="crop-image" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23e8f5e9\'/><path d=\'M30,30 C30,50 40,70 50,90 C60,70 70,50 70,30 C60,40 50,45 30,30 Z\' fill=\'%2381c784\'/><path d=\'M40,40 C40,55 45,65 50,75 C55,65 60,55 60,40 C55,45 50,48 40,40 Z\' fill=\'%232e7d32\'/></svg>');"></div>
+              <div class="crop-details">
+                <h3 class="crop-name">Soybeans</h3>
+                <div class="crop-info">
+                  <div class="crop-info-item">
+                    <div class="info-label">Area</div>
+                    <div class="info-value">4 acres</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Planted</div>
+                    <div class="info-value">Oct 5</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Harvest</div>
+                    <div class="info-value">Feb 20</div>
+                  </div>
+                </div>
+                <div class="crop-progress">
+                  <div class="progress-label">
+                    <span>Growth Progress</span>
+                    <span>30%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%; background-color: #2e7d32;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="crop-card">
+              <div class="crop-image" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%23f3e5f5\'/><path d=\'M50,20 C65,30 75,45 75,65 C75,80 65,90 50,90 C35,90 25,80 25,65 C25,45 35,30 50,20 Z\' fill=\'%23ce93d8\'/><path d=\'M50,30 C60,40 65,50 65,65 C65,75 60,80 50,80 C40,80 35,75 35,65 C35,50 40,40 50,30 Z\' fill=\'%239c27b0\'/></svg>');"></div>
+              <div class="crop-details">
+                <h3 class="crop-name">Cotton</h3>
+                <div class="crop-info">
+                  <div class="crop-info-item">
+                    <div class="info-label">Area</div>
+                    <div class="info-value">2 acres</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Planted</div>
+                    <div class="info-value">Jul 10</div>
+                  </div>
+                  <div class="crop-info-item">
+                    <div class="info-label">Harvest</div>
+                    <div class="info-value">Nov 30</div>
+                  </div>
+                </div>
+                <div class="crop-progress">
+                  <div class="progress-label">
+                    <span>Growth Progress</span>
+                    <span>85%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%; background-color: #9c27b0;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Budget Section -->
+        <section class="budget-section animate-slide-right">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-container" style="background-color: #e8f5e9; color: #2e7d32;">
+                <svg class="section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2>Budget Overview</h2>
+            </div>
+            
+            <div class="section-actions">
+              <button class="secondary-button" id="fullReportBtn">
+                Full report →
+              </button>
+            </div>
+          </div>
+          
+          <div class="budget-content">
+            <div class="budget-card">
+              <div class="budget-header">
+                <div class="budget-title">Monthly Expenses</div>
+                <div class="budget-amount">₹45,200</div>
+              </div>
+              
+              <div class="budget-chart">
+                <div class="chart-bars">
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 60%; background-color: #4caf50;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 75%; background-color: #ff9800;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 45%; background-color: #2196f3;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 90%; background-color: #f44336;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 30%; background-color: #9c27b0;"></div>
+                  </div>
+                </div>
+                
+                <div class="chart-labels">
+                  <div class="chart-label">Seeds</div>
+                  <div class="chart-label">Fertilizer</div>
+                  <div class="chart-label">Labor</div>
+                  <div class="chart-label">Equipment</div>
+                  <div class="chart-label">Other</div>
+                </div>
+              </div>
+              
+              <div class="budget-legend">
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #4caf50;"></div>
+                  <span>Seeds</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #ff9800;"></div>
+                  <span>Fertilizer</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #2196f3;"></div>
+                  <span>Labor</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #f44336;"></div>
+                  <span>Equipment</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: #9c27b0;"></div>
+                  <span>Other</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="budget-card">
+              <div class="budget-header">
+                <div class="budget-title">Projected Income</div>
+                <div class="budget-amount">₹1,25,000</div>
+              </div>
+              
+              <div class="budget-chart">
+                <div class="chart-bars">
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 80%; background-color: #4caf50;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 60%; background-color: #ff9800;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 40%; background-color: #2196f3;"></div>
+                  </div>
+                  <div class="chart-bar" style="height: 150px;">
+                    <div class="chart-bar-fill" style="height: 20%; background-color: #9c27b0;"></div>
+                  </div>
+                </div>
+                
+                <div class="chart-labels">
+                  <div class="chart-label">Wheat</div>
+                  <div class="chart-label">Corn</div>
+                  <div class="chart-label">Soybeans</div>
+                  <div class="chart-label">Cotton</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Weather Alert Modal -->
+    <div class="modal-overlay" id="weatherAlertModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Set Weather Alert</h3>
+          <button class="modal-close" id="closeWeatherModal">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="alertType">Alert Type</label>
+            <select class="form-control" id="alertType">
+              <option>Rain Alert</option>
+              <option>Temperature Alert</option>
+              <option>Humidity Alert</option>
+              <option>Wind Alert</option>
+              <option>Frost Alert</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="thresholdValue">Threshold Value</label>
+            <input type="number" class="form-control" id="thresholdValue" placeholder="Enter value">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="alertField">Field to Monitor</label>
+            <select class="form-control" id="alertField">
+              <option>All Fields</option>
+              <option>Wheat Field</option>
+              <option>Corn Field</option>
+              <option>Soybeans Field</option>
+              <option>Cotton Field</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="alertNotification">Notification Method</label>
+            <select class="form-control" id="alertNotification">
+              <option>SMS</option>
+              <option>Email</option>
+              <option>App Notification</option>
+              <option>All Methods</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="secondary-button" id="cancelWeatherAlert">Cancel</button>
+          <button class="primary-button" id="saveWeatherAlert">Set Alert</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Current date display
+      const updateDate = () => {
+        const now = new Date();
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const day = days[now.getDay()];
+        
+        const date = now.getDate().toString().padStart(2, '0');
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const year = now.getFullYear();
+        
+        document.querySelector('.day').textContent = day;
+        document.querySelector('.date').textContent = `${date}-${month}-${year}`;
+      };
+      
+      updateDate();
+      
+      // Task checkbox functionality
+      function toggleTaskComplete(checkbox) {
+        checkbox.classList.toggle('checked');
+        const taskItem = checkbox.closest('.task-item');
+        const taskTitle = taskItem.querySelector('.task-title');
+        const taskDue = taskItem.querySelector('.task-due');
+        
+        if (checkbox.classList.contains('checked')) {
+          taskTitle.style.textDecoration = 'line-through';
+          taskTitle.style.opacity = '0.7';
+          const now = new Date();
+          const hours = now.getHours();
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          const formattedHours = hours % 12 || 12;
+          taskDue.textContent = `Completed at ${formattedHours}:${minutes} ${ampm}`;
+        } else {
+          taskTitle.style.textDecoration = 'none';
+          taskTitle.style.opacity = '1';
+          taskDue.textContent = taskDue.getAttribute('data-original') || taskDue.textContent;
+        }
+      }
+      
+      // Button functionality
+      document.getElementById('addProductBtn').addEventListener('click', function() {
+        alert('Add Product form will open here');
+      });
+      
+      document.getElementById('guidanceBtn').addEventListener('click', function() {
+        alert('Farmer guidance resources will open here');
+      });
+      
+      document.getElementById('addTaskBtn').addEventListener('click', function() {
+        alert('Add Task form will open here');
+      });
+      
+      document.getElementById('viewAllCropsBtn').addEventListener('click', function() {
+        alert('View all crops page will open here');
+      });
+      
+      document.getElementById('addCropBtn').addEventListener('click', function() {
+        alert('Add new crop form will open here');
+      });
+      
+      document.getElementById('fullReportBtn').addEventListener('click', function() {
+        alert('Full financial report will open here');
+      });
+      
+      document.getElementById('fullWeatherBtn').addEventListener('click', function() {
+        alert('Full weather report will open here');
+      });
+      
+      document.getElementById('mapLayersBtn').addEventListener('click', function() {
+        alert('Map layers options will open here');
+      });
+      
+      document.getElementById('fullMapBtn').addEventListener('click', function() {
+        alert('Full map view will open here');
+      });
+      
+      // Map zoom controls
+      document.getElementById('zoomInBtn').addEventListener('click', function() {
+        const map = document.querySelector('.map svg');
+        const currentViewBox = map.getAttribute('viewBox').split(' ');
+        const width = parseInt(currentViewBox[2]) * 0.8;
+        const height = parseInt(currentViewBox[3]) * 0.8;
+        const x = parseInt(currentViewBox[0]) + (parseInt(currentViewBox[2]) - width) / 2;
+        const y = parseInt(currentViewBox[1]) + (parseInt(currentViewBox[3]) - height) / 2;
+        map.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
+      });
+      
+      document.getElementById('zoomOutBtn').addEventListener('click', function() {
+        const map = document.querySelector('.map svg');
+        const currentViewBox = map.getAttribute('viewBox').split(' ');
+        const width = parseInt(currentViewBox[2]) * 1.2;
+        const height = parseInt(currentViewBox[3]) * 1.2;
+        const x = parseInt(currentViewBox[0]) - (width - parseInt(currentViewBox[2])) / 2;
+        const y = parseInt(currentViewBox[1]) - (height - parseInt(currentViewBox[<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'944ecdf6f7324847',t:'MTc0ODExMDgwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+
+</body>
+</html>
