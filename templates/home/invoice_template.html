@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSage Invoice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .invoice-header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+        }
+        .invoice-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+        .item-card {
+            transition: all 0.3s ease;
+        }
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .print-button {
+            transition: all 0.3s ease;
+        }
+        .print-button:hover {
+            background-color: #2E7D32;
+        }
+        .download-button:hover {
+            background-color: #1565C0;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .invoice-container {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+    <div class="invoice-container">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <div class="flex justify-between items-center">
+                <div>
+                    <svg class="logo" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20,10 Q40,5 50,20 T80,30" stroke="white" stroke-width="3" fill="none"/>
+                        <circle cx="20" cy="25" r="5" fill="white"/>
+                        <circle cx="50" cy="15" r="5" fill="white"/>
+                        <circle cx="80" cy="30" r="5" fill="white"/>
+                        <text x="15" y="50" font-size="14" font-weight="bold" fill="white">AgroSage</text>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <h1 class="text-2xl font-bold">INVOICE</h1>
+                    <p class="text-sm opacity-80">INV-{{ total }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Info -->
+        
+        <div class="p-8">
+            <div class="flex flex-wrap justify-between mb-8">
+                <div class="w-full md:w-1/2 mb-4 md:mb-0">
+                    <h3 class="text-sm uppercase text-gray-500 mb-1">Billed To:</h3>
+                    <p class="font-medium">{{ user.username }}</p>
+                    <p class="text-sm text-gray-600">{{ user.username }}</p>
+                    <p class="text-sm text-gray-600">{{ user.username }}</p>
+                </div>
+                <div class="w-full md:w-1/2 text-left md:text-right">
+                    <div class="mb-2">
+                        <span class="text-sm uppercase text-gray-500">Invoice Date:</span>
+                        <span class="ml-2 font-medium">{{ now|date:"d M Y H:i" }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-sm uppercase text-gray-500">Invoice Time:</span>
+                        <span class="ml-2 font-medium">{{ now|date:"d M Y H:i" }}</span>
+                    </div>
+                    <div>
+                        <span class="text-sm uppercase text-gray-500">Order ID:</span>
+                        <span class="ml-2 font-medium">{{ now|date:"d M Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <div class="overflow-x-auto mb-8">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="py-3 px-4 text-sm uppercase font-semibold text-gray-600 rounded-tl-lg">Item</th>
+                            <th class="py-3 px-4 text-sm uppercase font-semibold text-gray-600">Description</th>
+                            <th class="py-3 px-4 text-sm uppercase font-semibold text-gray-600">Price/Kg</th>
+                            <th class="py-3 px-4 text-sm uppercase font-semibold text-gray-600">Quantity</th>
+                            <th class="py-3 px-4 text-sm uppercase font-semibold text-gray-600 text-right rounded-tr-lg">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample Item 1 -->
+                        {% for cart in cart_items %}
+                        <tr class="border-b border-gray-200">
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <div class="h-12 w-12 rounded-md bg-green-100 flex items-center justify-center mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-medium">{{cart.items.items_name}}</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4 text-sm text-gray-600">{{ cart.items.items_description }}</td>
+                            <td class="py-4 px-4">₹{{ cart.items.item_price }}</td>
+                            <td class="py-4 px-4">{{ cart.items.items_weight }} KG</td>
+                            <td class="py-4 px-4 text-right">₹{{cart.items.item_price}}</td>
+                        </tr>
+                        {% endfor %}
+                   </tbody>
+                </table>
+            </div>
+
+            <!-- Summary -->
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/2 mb-6 md:mb-0">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Payment Information</h4>
+                        <p class="text-sm text-gray-600 mb-1">Account Name: AgroSage Enterprises</p>
+                        <p class="text-sm text-gray-600 mb-1">Account Number: XXXX-XXXX-XXXX-1234</p>
+                        <p class="text-sm text-gray-600">IFSC Code: AGRO0001234</p>
+                        
+                        <div class="mt-4">
+                            <div class="flex items-center">
+                                <div class="h-4 w-4 rounded-full bg-green-500 mr-2"></div>
+                                <span class="text-sm font-medium">Payment Status: Paid</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-5/12">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Subtotal:</span>
+                            <span>₹{{total}}</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">GST (5%):</span>
+                            <span>₹0</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-600">Shipping:</span>
+                            <span>₹0</span>
+                        </div>
+                        <div class="border-t border-gray-300 my-2"></div>
+                        <div class="flex justify-between font-bold text-lg">
+                            <span>Total:</span>
+                            <span>₹{{total}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="mt-8 border-t border-gray-200 pt-6">
+                <h4 class="font-semibold mb-2">Notes</h4>
+                <p class="text-sm text-gray-600">Thank you for your business! Payment is due within 30 days. Please make the payment via bank transfer or UPI using the details provided above.</p>
+            </div>
+
+            <!-- Terms -->
+            <div class="mt-6">
+                <h4 class="font-semibold mb-2">Terms & Conditions</h4>
+                <ul class="text-xs text-gray-600 list-disc pl-5 space-y-1">
+                    <li>All prices are in Indian Rupees (₹)</li>
+                    <li>Goods once sold cannot be returned</li>
+                    <li>Delivery will be made within 7 working days</li>
+                    <li>For any queries, please contact our customer support at support@agrosage.com</li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-wrap justify-center gap-4 no-print">
+                <button onclick="window.print()" class="print-button bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg flex items-center transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Print Invoice
+                </button>
+                <button onclick="downloadPDF()" class="download-button bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg flex items-center transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Download PDF
+                </button>
+                <button onclick="sendEmail()" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-6 rounded-lg flex items-center transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Email Invoice
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 p-6 text-center text-sm text-gray-600 border-t border-gray-200">
+            <p>AgroSage Enterprises | Neelbad Road, Bhopal, India | +91 98765 43210</p>
+            <p class="mt-1">www.agrosage.com | support@agrosage.com</p>
+            <div class="mt-3 flex justify-center space-x-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            // In a real implementation, this would use a library like jsPDF
+            // For this demo, we'll just show an alert
+            alert("PDF download started!");
+            // Simulate download delay
+            setTimeout(() => {
+                alert("Invoice_AgroSage.pdf has been downloaded successfully!");
+            }, 1500);
+        }
+
+        function sendEmail() {
+            // Show email form
+            const email = prompt("Enter email address to send invoice:", "");
+            if (email) {
+                alert(`Invoice will be sent to ${email} shortly!`);
+            }
+        }
+
+        // Add current date if template tags aren't processed
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateElements = document.querySelectorAll('span:contains("{{ now|date")');
+            if (dateElements.length > 0) {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+                
+                dateElements.forEach(el => {
+                    if (el.textContent.includes("'d M Y'")) {
+                        el.textContent = dateStr;
+                    } else if (el.textContent.includes("'H:i'")) {
+                        el.textContent = timeStr;
+                    }
+                });
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'945479f984a0c1c7',t:'MTc0ODE3MDI3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

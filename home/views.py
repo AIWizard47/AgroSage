@@ -6,6 +6,11 @@ from django.contrib.auth.decorators import login_required
 from .models import Check, MarketItems, Cart
 from .groq_ai import ask_ai
 import requests
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+from io import BytesIO
+from .models import Cart
 
 # Create your views here.
 def index(request):
@@ -120,7 +125,7 @@ def add_to_cart(request, item_id):
 
     # Add item to cart
     Cart.objects.create(user=request.user, items=item)
-    return redirect('view_cart')
+    return redirect('market')
 
 @login_required
 def view_cart(request):
@@ -128,7 +133,7 @@ def view_cart(request):
     total_count = cart_items.count()
     total_price = 0
     for price in cart_items:
-        total_price += price.items.item_price
+        total_price += price.items.item_price  * price.items.items_weight
     context = {
         'cart_items': cart_items,
         'total_count' : total_count,
@@ -206,3 +211,46 @@ def plant_search(request):
         'plants': plants,
         'query': query
     })
+    
+def generate_invoice(request):
+    user = request.user
+    cart_items = Cart.objects.filter(user=user)
+    context = {
+        "user": user,
+        "cart_items": cart_items,
+        "total": sum(item.items.item_price * item.items.items_weight for item in cart_items),
+    }
+    html = render_to_string("home/invoice_template.html", context)
+
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+
+    if not pdf.err:
+        response = HttpResponse(result.getvalue(), content_type="application/pdf")
+        response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+        return response
+    return HttpResponse("Error generating PDF", status=500)
+
+# from weasyprint import HTML
+
+# def generate_invoice(request):
+#     html_string = render_to_string("invoice_template.html", {...})
+#     html = HTML(string=html_string)
+#     pdf = html.write_pdf()
+
+#     response = HttpResponse(pdf, content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+#     return response
+
+
+def payment_success(request):
+    # Payment verified...
+
+    # Generate invoice
+    response = generate_invoice(request)
+
+    # Remove the user's cart items
+    if request.user.is_authenticated:
+        Cart.objects.filter(user=request.user).delete()
+
+    return response

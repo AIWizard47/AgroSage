@@ -113,10 +113,7 @@
                                 </div>
                                 <div class="flex justify-between items-center mt-4">
                                     <div class="flex items-center border rounded-md">
-                                        <button class="quantity-btn px-3 py-1 text-gray-600 transition" onclick="updateQuantity(this, -1)">-</button>
-                                        <!-- Assuming you have quantity stored in cart model or else default 1 -->
-                                        <span class="px-3 py-1 quantity-value">{{ cart.quantity|default:1 }}</span>
-                                        <button class="quantity-btn px-3 py-1 text-gray-600 transition" onclick="updateQuantity(this, 1)">+</button>
+                                        <p class="text-lg font-semibold text-green-700">{{ cart.items.items_weight }} KG</p>
                                     </div>
                                     <button class="text-red-500 hover:text-red-700 transition" onclick="window.location.href='{% url 'remove_from_cart' cart.id %}'">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -168,12 +165,14 @@
                         </div>
                         
                         <!-- Checkout Button -->
-                        <button class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md font-medium mt-6 transition" onclick="checkout()">
+                        <button class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md font-medium mt-6 transition" onclick="window.location.href='{% url 'payment_success' %}'">
                             Proceed to Checkout
                         </button>
                         
                         <!-- Continue Shopping -->
-                        <button class="w-full bg-white border border-green-600 text-green-600 hover:bg-green-50 py-3 rounded-md font-medium transition">
+                        <button class="w-full bg-white border border-green-600 text-green-600 hover:bg-green-50 py-3 rounded-md font-medium transition"
+                        onclick="window.location.href='{% url 'market' %}'"
+                        >
                             Continue Shopping
                         </button>
                     </div>
