@@ -6,7 +6,7 @@ urlpatterns = [
     path('logout/',views.log_out,name="logout"),
     path('register/', views.register_view, name='register'),
     path("market/",views.market,name="market"),
-    path('guidance/', views.farmer_guidance, name='farmer_guidance'),
+    path('ai-guidance/', views.farmer_guidance, name='farmer_guidance'),
     path('cart/add/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.view_cart, name='view_cart'),
     path('cart/remove/<int:cart_id>/', views.remove_from_cart, name='remove_from_cart'),
@@ -14,4 +14,6 @@ urlpatterns = [
     path("farmer-dashboard/",views.farmer_dashboard,name="farmer_dashboard"),
     path('plants/search/', views.plant_search, name='plant_search'),
     path('payment_success/',views.payment_success,name="payment_success"),
+    path('feedback/',views.feedback,name="feedback"),
+    path('guidance/',views.guidance,name="guidance"),
 ]

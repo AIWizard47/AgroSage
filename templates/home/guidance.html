@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Guidance - Smart Farming Platform</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Controls */
+        .controls {
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-filter-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        /* Season Sections */
+        .season-section {
+            margin: 3rem 0;
+        }
+
+        .season-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .season-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .season-description {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Crop Grid */
+        .crop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .crop-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .crop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .crop-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .crop-content {
+            padding: 1.5rem;
+        }
+
+        .crop-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 1rem;
+        }
+
+        .crop-info {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            color: #10b981;
+        }
+
+        .expand-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .expand-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .guidance-section {
+            margin-bottom: 2rem;
+        }
+
+        .guidance-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .guidance-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .guidance-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .guidance-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Extra Sections */
+        .extra-sections {
+            background: white;
+            margin: 3rem 0;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+        }
+
+        /* Chatbot Button */
+        .chatbot-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .chatbot-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .search-filter-section {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .crop-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .modal {
+                padding: 1rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .chatbot-btn {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>🌾 Crop Guidance</h1>
+                <p>Your Smart Farming Companion for Better Harvests</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="container">
+            <div class="search-filter-section">
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search crops by name or season...">
+                </div>
+                <div class="filters">
+                    <select class="filter-select" id="seasonFilter">
+                        <option value="">All Seasons</option>
+                        <option value="kharif">Kharif</option>
+                        <option value="rabi">Rabi</option>
+                        <option value="zaid">Zaid</option>
+                    </select>
+                    <select class="filter-select" id="waterFilter">
+                        <option value="">Water Requirement</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <select class="filter-select" id="soilFilter">
+                        <option value="">Soil Type</option>
+                        <option value="clay">Clay</option>
+                        <option value="loamy">Loamy</option>
+                        <option value="sandy">Sandy</option>
+                        <option value="alluvial">Alluvial</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Kharif Crops Section -->
+        <section class="season-section" data-season="kharif">
+            <div class="season-header">
+                <h2 class="season-title">
+                    <i data-lucide="cloud-rain"></i>
+                    Kharif Crops
+                </h2>
+                <p class="season-description">
+                    Monsoon crops sown in June-July and harvested in September-October. These crops thrive in warm, humid conditions with abundant rainfall.
+                </p>
+            </div>
+            <div class="crop-grid" id="kharifCrops">
+                <!-- Kharif crops will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Rabi Crops Section -->
+        <section class="season-section" data-season="rabi">
+            <div class="season-header">
+                <h2 class="season-title">
+                    <i data-lucide="snowflake"></i>
+                    Rabi Crops
+                </h2>
+                <p class="season-description">
+                    Winter crops sown in October-December and harvested in March-May. These crops prefer cooler temperatures and less water.
+                </p>
+            </div>
+            <div class="crop-grid" id="rabiCrops">
+                <!-- Rabi crops will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Zaid Crops Section -->
+        <section class="season-section" data-season="zaid">
+            <div class="season-header">
+                <h2 class="season-title">
+                    <i data-lucide="sun"></i>
+                    Zaid Crops
+                </h2>
+                <p class="season-description">
+                    Summer crops sown in March-April and harvested in June-July. These crops are grown with irrigation during hot, dry months.
+                </p>
+            </div>
+            <div class="crop-grid" id="zaidCrops">
+                <!-- Zaid crops will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Extra Sections -->
+        <section class="extra-sections">
+            <h2 style="text-align: center; font-size: 2rem; color: #059669; margin-bottom: 1rem;">Additional Resources</h2>
+            <div class="section-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="help-circle"></i>
+                    </div>
+                    <h3>FAQ</h3>
+                    <p>Common questions about crop planning, climate considerations, and farming best practices.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    <h3>Crop Calendar</h3>
+                    <p>Download our comprehensive PDF guide with seasonal farming schedules and planning tips.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3>Community</h3>
+                    <p>Connect with fellow farmers, share experiences, and learn from agricultural experts.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal" id="cropModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Crop Details</h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Button -->
+    <button class="chatbot-btn" onclick="openChatbot()">
+        <i data-lucide="message-circle"></i>
+        Need Crop Advice?
+    </button>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Crop data
+        const cropData = {
+            kharif: [
+                {
+                    name: 'Rice',
+                    icon: '🌾',
+                    sowing: 'June-July',
+                    harvest: 'October-November',
+                    water: 'high',
+                    soil: 'clay',
+                    climate: 'Hot and humid with heavy rainfall',
+                    guidance: {
+                        landPreparation: [
+                            'Plough the field 2-3 times when soil moisture is adequate',
+                            'Level the field properly for uniform water distribution',
+                            'Prepare raised seedbeds for nursery preparation',
+                            'Apply organic manure (10-12 tons/hectare) during last ploughing'
+                        ],
+                        seedSelection: [
+                            'Choose certified seeds of recommended varieties',
+                            'Treat seeds with fungicide before sowing',
+                            'Select varieties suitable for your region and water availability',
+                            'Use 20-25 kg seeds per hectare for transplanting'
+                        ],
+                        sowing: [
+                            'Prepare nursery beds 3-4 weeks before transplanting',
+                            'Transplant 20-25 day old seedlings in puddled field',
+                            'Maintain 2-3 seedlings per hill with 20x15 cm spacing',
+                            'Ensure proper water level (2-5 cm) during transplanting'
+                        ],
+                        irrigation: [
+                            'Maintain continuous standing water of 2-5 cm',
+                            'Drain field 1 week before harvesting',
+                            'Apply nitrogen in 3 splits: basal, tillering, and panicle initiation',
+                            'Monitor for deficiency symptoms and apply micronutrients'
+                        ],
+                        pestManagement: [
+                            'Monitor for stem borer, leaf folder, and brown plant hopper',
+                            'Use IPM practices including biological control',
+                            'Apply recommended insecticides only when ETL is reached',
+                            'Practice crop rotation to break disease cycles'
+                        ],
+                        harvesting: [
+                            'Harvest when 80-85% of grains turn golden yellow',
+                            'Cut crop early morning when moisture is less',
+                            'Dry immediately to prevent fungal infection',
+                            'Store in moisture-proof containers after proper drying'
+                        ]
+                    }
+                },
+                {
+                    name: 'Cotton',
+                    icon: '🤍',
+                    sowing: 'May-June',
+                    harvest: 'October-January',
+                    water: 'medium',
+                    soil: 'loamy',
+                    climate: 'Warm climate with moderate rainfall',
+                    guidance: {
+                        landPreparation: [
+                            'Deep ploughing in summer to break hard pan',
+                            'Apply organic matter and incorporate well',
+                            'Prepare ridges and furrows for better drainage',
+                            'Ensure proper field leveling for uniform growth'
+                        ],
+                        seedSelection: [
+                            'Use certified hybrid or variety seeds',
+                            'Treat seeds with fungicide and insecticide',
+                            'Select varieties resistant to local pests and diseases',
+                            'Use 1.5-2 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow on ridges with 67.5 cm row spacing',
+                            'Maintain plant to plant distance of 10-15 cm',
+                            'Sow at 2-3 cm depth in moist soil',
+                            'Thin to one plant per hill after 15-20 days'
+                        ],
+                        irrigation: [
+                            'Provide pre-sowing irrigation if soil moisture is inadequate',
+                            'First irrigation 3-4 weeks after sowing',
+                            'Critical stages: flowering and boll development',
+                            'Avoid over-irrigation to prevent pest problems'
+                        ],
+                        pestManagement: [
+                            'Regular monitoring for bollworm, aphids, and whitefly',
+                            'Use pheromone traps for early detection',
+                            'Spray recommended insecticides at appropriate timing',
+                            'Practice refuge strategy for Bt cotton varieties'
+                        ],
+                        harvesting: [
+                            'Harvest in early morning when dew is present',
+                            'Pick only fully opened bolls',
+                            'Harvest in multiple rounds every 10-15 days',
+                            'Grade and store cotton in clean, dry conditions'
+                        ]
+                    }
+                },
+                {
+                    name: 'Sugarcane',
+                    icon: '🎋',
+                    sowing: 'February-March, October-November',
+                    harvest: '12-18 months after planting',
+                    water: 'high',
+                    soil: 'loamy',
+                    climate: 'Hot and humid with good rainfall',
+                    guidance: {
+                        landPreparation: [
+                            'Deep ploughing followed by harrowing',
+                            'Apply organic manure @ 25 tons/hectare',
+                            'Prepare furrows 30 cm deep with 90-120 cm spacing',
+                            'Ensure good drainage to prevent waterlogging'
+                        ],
+                        seedSelection: [
+                            'Select healthy seed canes from 8-10 month old crop',
+                            'Use 3-budded setts for planting',
+                            'Treat setts with fungicide solution',
+                            'Require 40,000-50,000 setts per hectare'
+                        ],
+                        sowing: [
+                            'Plant setts end to end in furrows',
+                            'Cover with 5-7 cm soil and irrigate immediately',
+                            'Maintain proper spacing between rows',
+                            'Gap filling within 30 days of planting'
+                        ],
+                        irrigation: [
+                            'Irrigate immediately after planting',
+                            'Weekly irrigation for first 2 months',
+                            'Fortnightly irrigation during grand growth phase',
+                            'Stop irrigation 2-3 weeks before harvesting'
+                        ],
+                        pestManagement: [
+                            'Monitor for shoot borer, scale insects, and termites',
+                            'Use biological control agents where possible',
+                            'Apply recommended insecticides for severe infestations',
+                            'Practice crop rotation with legumes'
+                        ],
+                        harvesting: [
+                            'Harvest when sugar content is maximum (18-20%)',
+                            'Cut canes close to ground level',
+                            'Transport to mill within 24-48 hours',
+                            'Remove trash and weeds before harvesting'
+                        ]
+                    }
+                },
+                {
+                    name: 'Maize',
+                    icon: '🌽',
+                    sowing: 'June-July',
+                    harvest: 'September-October',
+                    water: 'medium',
+                    soil: 'loamy',
+                    climate: 'Warm climate with moderate rainfall',
+                    guidance: {
+                        landPreparation: [
+                            'Plough field 2-3 times and level properly',
+                            'Apply farmyard manure @ 10-15 tons/hectare',
+                            'Prepare ridges for better drainage',
+                            'Ensure weed-free field before sowing'
+                        ],
+                        seedSelection: [
+                            'Use certified hybrid seeds for higher yield',
+                            'Treat seeds with fungicide before sowing',
+                            'Select varieties suitable for local conditions',
+                            'Use 20-25 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow at 60 cm row spacing and 20-25 cm plant spacing',
+                            'Sow 2-3 seeds per hill at 3-5 cm depth',
+                            'Thin to one plant per hill after 15-20 days',
+                            'Ensure adequate soil moisture at sowing'
+                        ],
+                        irrigation: [
+                            'Critical stages: knee height, tasseling, and grain filling',
+                            'Light and frequent irrigations preferred',
+                            'Avoid waterlogging at any stage',
+                            'Stop irrigation 2 weeks before harvesting'
+                        ],
+                        pestManagement: [
+                            'Monitor for stem borer, fall armyworm, and aphids',
+                            'Use whorl application for stem borer control',
+                            'Deploy pheromone traps for monitoring',
+                            'Practice crop rotation with legumes'
+                        ],
+                        harvesting: [
+                            'Harvest when grains reach physiological maturity',
+                            'Moisture content should be around 20-25%',
+                            'Dry cobs immediately after harvesting',
+                            'Store in moisture-proof containers'
+                        ]
+                    }
+                }
+            ],
+            rabi: [
+                {
+                    name: 'Wheat',
+                    icon: '🌾',
+                    sowing: 'November-December',
+                    harvest: 'March-April',
+                    water: 'medium',
+                    soil: 'loamy',
+                    climate: 'Cool and dry weather during growing season',
+                    guidance: {
+                        landPreparation: [
+                            'Plough field after harvest of kharif crop',
+                            'Apply organic manure @ 10-15 tons/hectare',
+                            'Level field properly for uniform irrigation',
+                            'Last ploughing just before sowing'
+                        ],
+                        seedSelection: [
+                            'Use certified seeds of recommended varieties',
+                            'Treat seeds with fungicide before sowing',
+                            'Select varieties resistant to rust diseases',
+                            'Use 100-125 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in rows 20-23 cm apart',
+                            'Maintain sowing depth of 3-5 cm',
+                            'Ensure uniform distribution of seeds',
+                            'Complete sowing by mid-December for optimal yield'
+                        ],
+                        irrigation: [
+                            'First irrigation 20-25 days after sowing (crown root stage)',
+                            'Second irrigation at tillering stage (40-45 DAS)',
+                            'Third irrigation at jointing stage (60-65 DAS)',
+                            'Subsequent irrigations at flowering and grain filling'
+                        ],
+                        pestManagement: [
+                            'Monitor for aphids, termites, and rust diseases',
+                            'Use resistant varieties where possible',
+                            'Apply fungicides for rust control',
+                            'Practice crop rotation to break disease cycle'
+                        ],
+                        harvesting: [
+                            'Harvest when grains are hard and moisture is 20-25%',
+                            'Cut crop in early morning hours',
+                            'Dry immediately to prevent fungal infection',
+                            'Thresh and clean grain properly before storage'
+                        ]
+                    }
+                },
+                {
+                    name: 'Mustard',
+                    icon: '🌻',
+                    sowing: 'October-November',
+                    harvest: 'February-March',
+                    water: 'low',
+                    soil: 'loamy',
+                    climate: 'Cool and dry climate',
+                    guidance: {
+                        landPreparation: [
+                            'Prepare fine and firm seedbed',
+                            'Apply organic manure @ 8-10 tons/hectare',
+                            'Plough field 2-3 times and level properly',
+                            'Remove weeds and crop residues'
+                        ],
+                        seedSelection: [
+                            'Use certified seeds of recommended varieties',
+                            'Treat seeds with fungicide before sowing',
+                            'Select varieties suitable for local conditions',
+                            'Use 3-4 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in rows 30 cm apart',
+                            'Maintain plant to plant distance of 10 cm',
+                            'Sow at 2-3 cm depth in well-prepared soil',
+                            'Thin overcrowded plants after 2-3 weeks'
+                        ],
+                        irrigation: [
+                            'First irrigation 25-30 days after sowing',
+                            'Second irrigation at flowering stage',
+                            'Third irrigation during pod filling stage',
+                            'Avoid irrigation during maturity stage'
+                        ],
+                        pestManagement: [
+                            'Monitor for aphids, painted bug, and white rust',
+                            'Use yellow sticky traps for aphid monitoring',
+                            'Apply neem-based insecticides for organic control',
+                            'Practice crop rotation with cereals'
+                        ],
+                        harvesting: [
+                            'Harvest when pods turn brown and rattle',
+                            'Cut crop early morning to prevent shattering',
+                            'Dry properly before threshing',
+                            'Store seeds in airtight containers'
+                        ]
+                    }
+                },
+                {
+                    name: 'Chickpea',
+                    icon: '🫘',
+                    sowing: 'October-November',
+                    harvest: 'March-April',
+                    water: 'low',
+                    soil: 'loamy',
+                    climate: 'Cool and dry climate',
+                    guidance: {
+                        landPreparation: [
+                            'Deep ploughing in summer to conserve moisture',
+                            'Apply phosphorus and potash as basal dose',
+                            'Prepare fine tilth for better germination',
+                            'Ensure proper drainage to prevent waterlogging'
+                        ],
+                        seedSelection: [
+                            'Use certified seeds of wilt-resistant varieties',
+                            'Treat seeds with rhizobium culture',
+                            'Also treat with fungicide for disease protection',
+                            'Use 75-80 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in rows 30 cm apart',
+                            'Maintain plant spacing of 10 cm',
+                            'Sow at 3-4 cm depth in well-prepared soil',
+                            'Complete sowing by end of November'
+                        ],
+                        irrigation: [
+                            'First irrigation at pre-flowering stage if needed',
+                            'Second irrigation during pod formation',
+                            'Avoid irrigation during flowering to prevent flower drop',
+                            'Generally requires 2-3 irrigations in total'
+                        ],
+                        pestManagement: [
+                            'Monitor for pod borer, aphids, and wilt disease',
+                            'Use pheromone traps for pod borer monitoring',
+                            'Practice crop rotation to manage soil-borne diseases',
+                            'Remove and destroy infected plants immediately'
+                        ],
+                        harvesting: [
+                            'Harvest when pods turn brown and dry',
+                            'Cut plants early morning to prevent shattering',
+                            'Dry thoroughly before threshing',
+                            'Store in cool, dry place with proper aeration'
+                        ]
+                    }
+                },
+                {
+                    name: 'Barley',
+                    icon: '🌾',
+                    sowing: 'November-December',
+                    harvest: 'March-April',
+                    water: 'low',
+                    soil: 'sandy',
+                    climate: 'Cool and dry climate, tolerates salinity',
+                    guidance: {
+                        landPreparation: [
+                            'Plough field and prepare fine seedbed',
+                            'Apply organic manure @ 8-10 tons/hectare',
+                            'Level field for uniform water distribution',
+                            'Remove weeds and volunteer plants'
+                        ],
+                        seedSelection: [
+                            'Use certified seeds of recommended varieties',
+                            'Treat seeds with fungicide before sowing',
+                            'Select hulled or naked varieties as per requirement',
+                            'Use 75-100 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in rows 20-22.5 cm apart',
+                            'Maintain sowing depth of 3-5 cm',
+                            'Ensure uniform distribution of seeds',
+                            'Complete sowing by mid-December'
+                        ],
+                        irrigation: [
+                            'First irrigation 25-30 days after sowing',
+                            'Second irrigation at tillering stage',
+                            'Third irrigation at booting stage',
+                            'Light irrigations during grain filling'
+                        ],
+                        pestManagement: [
+                            'Monitor for aphids, termites, and loose smut',
+                            'Use seed treatment for smut control',
+                            'Apply recommended insecticides for aphid control',
+                            'Practice crop rotation with legumes'
+                        ],
+                        harvesting: [
+                            'Harvest when crop turns golden yellow',
+                            'Cut crop when moisture content is 20-25%',
+                            'Dry immediately after harvesting',
+                            'Thresh and store in moisture-proof containers'
+                        ]
+                    }
+                }
+            ],
+            zaid: [
+                {
+                    name: 'Watermelon',
+                    icon: '🍉',
+                    sowing: 'February-March',
+                    harvest: 'May-June',
+                    water: 'medium',
+                    soil: 'sandy',
+                    climate: 'Hot and dry climate with irrigation',
+                    guidance: {
+                        landPreparation: [
+                            'Prepare raised beds or mounds for better drainage',
+                            'Apply organic manure @ 15-20 tons/hectare',
+                            'Ensure good drainage to prevent root rot',
+                            'Prepare field after winter crop harvest'
+                        ],
+                        seedSelection: [
+                            'Use certified hybrid seeds for better quality',
+                            'Treat seeds with fungicide before sowing',
+                            'Select varieties suitable for summer cultivation',
+                            'Use 2-3 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in pits 2-3 meters apart',
+                            'Plant 2-3 seeds per pit at 2-3 cm depth',
+                            'Thin to one healthy plant per pit',
+                            'Provide support or mulching around plants'
+                        ],
+                        irrigation: [
+                            'Frequent light irrigations required',
+                            'Critical stages: flowering and fruit development',
+                            'Use drip irrigation for water efficiency',
+                            'Maintain adequate soil moisture throughout'
+                        ],
+                        pestManagement: [
+                            'Monitor for fruit fly, aphids, and powdery mildew',
+                            'Use organic mulch to reduce pest problems',
+                            'Apply neem-based products for pest control',
+                            'Remove infected fruits immediately'
+                        ],
+                        harvesting: [
+                            'Harvest when fruits produce hollow sound on tapping',
+                            'Check for dried tendril near fruit attachment',
+                            'Handle carefully to prevent damage',
+                            'Market immediately for better prices'
+                        ]
+                    }
+                },
+                {
+                    name: 'Fodder Maize',
+                    icon: '🌽',
+                    sowing: 'March-April',
+                    harvest: 'June-July',
+                    water: 'medium',
+                    soil: 'loamy',
+                    climate: 'Hot climate with adequate irrigation',
+                    guidance: {
+                        landPreparation: [
+                            'Plough field and prepare fine seedbed',
+                            'Apply organic manure @ 10-12 tons/hectare',
+                            'Ensure proper leveling for uniform growth',
+                            'Remove weeds and prepare clean field'
+                        ],
+                        seedSelection: [
+                            'Use multi-cut varieties for multiple harvests',
+                            'Treat seeds with fungicide before sowing',
+                            'Select fast-growing varieties',
+                            'Use 25-30 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in rows 25-30 cm apart',
+                            'Broadcast method can also be used',
+                            'Sow at 2-3 cm depth in moist soil',
+                            'Ensure adequate seed rate for dense crop'
+                        ],
+                        irrigation: [
+                            'First irrigation immediately after sowing',
+                            'Regular irrigations every 4-5 days',
+                            'Critical during hot summer months',
+                            'Maintain soil moisture throughout growing period'
+                        ],
+                        pestManagement: [
+                            'Monitor for stem borer and aphids',
+                            'Use IPM practices for pest control',
+                            'Apply organic pesticides when needed',
+                            'Maintain field hygiene'
+                        ],
+                        harvesting: [
+                            'First cut at 45-50 days after sowing',
+                            'Subsequent cuts every 30-35 days',
+                            'Cut when plants are 1-1.5 meters high',
+                            'Leave 10-15 cm stubble for regrowth'
+                        ]
+                    }
+                },
+                {
+                    name: 'Cucumber',
+                    icon: '🥒',
+                    sowing: 'February-March',
+                    harvest: 'May-June',
+                    water: 'medium',
+                    soil: 'loamy',
+                    climate: 'Warm climate with good sunshine',
+                    guidance: {
+                        landPreparation: [
+                            'Prepare raised beds for better drainage',
+                            'Apply organic manure @ 20-25 tons/hectare',
+                            'Ensure good soil structure and fertility',
+                            'Prepare field with proper spacing between beds'
+                        ],
+                        seedSelection: [
+                            'Use certified hybrid seeds for higher yield',
+                            'Treat seeds with fungicide before sowing',
+                            'Select disease-resistant varieties',
+                            'Use 1.5-2 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in pits 1.5-2 meters apart',
+                            'Plant 2-3 seeds per pit',
+                            'Sow at 2-3 cm depth in well-prepared soil',
+                            'Provide support structure for climbing'
+                        ],
+                        irrigation: [
+                            'Regular irrigation required throughout crop period',
+                            'Avoid waterlogging and moisture stress',
+                            'Use drip irrigation for better efficiency',
+                            'Critical during flowering and fruiting'
+                        ],
+                        pestManagement: [
+                            'Monitor for cucumber beetle, aphids, and downy mildew',
+                            'Use yellow sticky traps for pest monitoring',
+                            'Apply organic pesticides as preventive measure',
+                            'Ensure proper plant spacing for air circulation'
+                        ],
+                        harvesting: [
+                            'Harvest fruits when they reach marketable size',
+                            'Pick regularly every 2-3 days',
+                            'Handle carefully to prevent damage',
+                            'Market fresh for better returns'
+                        ]
+                    }
+                },
+                {
+                    name: 'Sunflower',
+                    icon: '🌻',
+                    sowing: 'March-April',
+                    harvest: 'June-July',
+                    water: 'low',
+                    soil: 'loamy',
+                    climate: 'Hot and dry climate',
+                    guidance: {
+                        landPreparation: [
+                            'Deep ploughing for better root development',
+                            'Apply organic manure @ 10-15 tons/hectare',
+                            'Prepare fine seedbed with proper leveling',
+                            'Ensure good drainage in the field'
+                        ],
+                        seedSelection: [
+                            'Use certified hybrid seeds for higher oil content',
+                            'Treat seeds with fungicide and insecticide',
+                            'Select varieties suitable for summer cultivation',
+                            'Use 8-10 kg seeds per hectare'
+                        ],
+                        sowing: [
+                            'Sow in rows 45-60 cm apart',
+                            'Maintain plant to plant distance of 20-25 cm',
+                            'Sow at 3-4 cm depth in moist soil',
+                            'Thin to one plant per hill after germination'
+                        ],
+                        irrigation: [
+                            'First irrigation immediately after sowing',
+                            'Critical stages: head formation and grain filling',
+                            'Requires 4-5 irrigations during crop period',
+                            'Avoid irrigation during maturity'
+                        ],
+                        pestManagement: [
+                            'Monitor for head borer, stem borer, and leaf spot',
+                            'Use pheromone traps for monitoring',
+                            'Apply recommended insecticides at appropriate timing',
+                            'Practice crop rotation with cereals'
+                        ],
+                        harvesting: [
+                            'Harvest when back of head turns brown',
+                            'Seeds should be hard and oil content maximum',
+                            'Cut heads early morning to prevent shattering',
+                            'Dry properly before threshing and storage'
+                        ]
+                    }
+                }
+            ]
+        };
+
+        // DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const seasonFilter = document.getElementById('seasonFilter');
+        const waterFilter = document.getElementById('waterFilter');
+        const soilFilter = document.getElementById('soilFilter');
+        const modal = document.getElementById('cropModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        // Initialize the page
+        function initializePage() {
+            renderCrops();
+            setupEventListeners();
+        }
+
+        // Render crops
+        function renderCrops() {
+            Object.keys(cropData).forEach(season => {
+                const container = document.getElementById(`${season}Crops`);
+                container.innerHTML = '';
+                
+                cropData[season].forEach(crop => {
+                    const cropCard = createCropCard(crop, season);
+                    container.appendChild(cropCard);
+                });
+            });
+        }
+
+        // Create crop card
+        function createCropCard(crop, season) {
+            const card = document.createElement('div');
+            card.className = 'crop-card fade-in';
+            card.setAttribute('data-season', season);
+            card.setAttribute('data-water', crop.water);
+            card.setAttribute('data-soil', crop.soil);
+            card.setAttribute('data-name', crop.name.toLowerCase());
+
+            card.innerHTML = `
+                <div class="crop-image">
+                    <span style="font-size: 4rem;">${crop.icon}</span>
+                </div>
+                <div class="crop-content">
+                    <h3 class="crop-name">${crop.name}</h3>
+                    <div class="crop-info">
+                        <div class="info-item">
+                            <i data-lucide="calendar" class="info-icon"></i>
+                            <span><strong>Sowing:</strong> ${crop.sowing}</span>
+                        </div>
+                        <div class="info-item">
+                            <i data-lucide="harvest" class="info-icon"></i>
+                            <span><strong>Harvest:</strong> ${crop.harvest}</span>
+                        </div>
+                        <div class="info-item">
+                            <i data-lucide="droplets" class="info-icon"></i>
+                            <span><strong>Water:</strong> ${crop.water.charAt(0).toUpperCase() + crop.water.slice(1)}</span>
+                        </div>
+                        <div class="info-item">
+                            <i data-lucide="mountain" class="info-icon"></i>
+                            <span><strong>Soil:</strong> ${crop.soil.charAt(0).toUpperCase() + crop.soil.slice(1)}</span>
+                        </div>
+                        <div class="info-item">
+                            <i data-lucide="thermometer" class="info-icon"></i>
+                            <span><strong>Climate:</strong> ${crop.climate}</span>
+                        </div>
+                    </div>
+                    <button class="expand-btn" onclick="openCropModal('${crop.name}', '${season}')">
+                        <i data-lucide="info"></i>
+                        View Complete Guide
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            searchInput.addEventListener('input', filterCrops);
+            seasonFilter.addEventListener('change', filterCrops);
+            waterFilter.addEventListener('change', filterCrops);
+            soilFilter.addEventListener('change', filterCrops);
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Filter crops
+        function filterCrops() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedSeason = seasonFilter.value;
+            const selectedWater = waterFilter.value;
+            const selectedSoil = soilFilter.value;
+
+            const allCards = document.querySelectorAll('.crop-card');
+            const seasonSections = document.querySelectorAll('.season-section');
+
+            allCards.forEach(card => {
+                const cardName = card.getAttribute('data-name');
+                const cardSeason = card.getAttribute('data-season');
+                const cardWater = card.getAttribute('data-water');
+                const cardSoil = card.getAttribute('data-soil');
+
+                const matchesSearch = cardName.includes(searchTerm) || cardSeason.includes(searchTerm);
+                const matchesSeason = !selectedSeason || cardSeason === selectedSeason;
+                const matchesWater = !selectedWater || cardWater === selectedWater;
+                const matchesSoil = !selectedSoil || cardSoil === selectedSoil;
+
+                if (matchesSearch && matchesSeason && matchesWater && matchesSoil) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hide empty season sections
+            seasonSections.forEach(section => {
+                const visibleCards = section.querySelectorAll('.crop-card[style="display: block;"], .crop-card:not([style*="display: none"])');
+                if (visibleCards.length === 0 && (searchTerm || selectedSeason || selectedWater || selectedSoil)) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+        }
+
+        // Open crop modal
+        function openCropModal(cropName, season) {
+            const crop = cropData[season].find(c => c.name === cropName);
+            if (!crop) return;
+
+            modalTitle.textContent = crop.name;
+            modalBody.innerHTML = generateModalContent(crop);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Re-initialize icons in modal
+            lucide.createIcons();
+        }
+
+        // Generate modal content
+        function generateModalContent(crop) {
+            return `
+                <div class="crop-info" style="margin-bottom: 2rem;">
+                    <div class="info-item" style="margin-bottom: 1rem; font-size: 1rem;">
+                        <i data-lucide="calendar"></i>
+                        <span><strong>Sowing Period:</strong> ${crop.sowing}</span>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem; font-size: 1rem;">
+                        <i data-lucide="harvest"></i>
+                        <span><strong>Harvesting Season:</strong> ${crop.harvest}</span>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem; font-size: 1rem;">
+                        <i data-lucide="thermometer"></i>
+                        <span><strong>Ideal Climate:</strong> ${crop.climate}</span>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem; font-size: 1rem;">
+                        <i data-lucide="droplets"></i>
+                        <span><strong>Water Requirement:</strong> ${crop.water.charAt(0).toUpperCase() + crop.water.slice(1)}</span>
+                    </div>
+                    <div class="info-item" style="margin-bottom: 1rem; font-size: 1rem;">
+                        <i data-lucide="mountain"></i>
+                        <span><strong>Soil Type:</strong> ${crop.soil.charAt(0).toUpperCase() + crop.soil.slice(1)}</span>
+                    </div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="shovel"></i>
+                        Land Preparation
+                    </h3>
+                    <ol class="guidance-steps">
+                        ${crop.guidance.landPreparation.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="seed"></i>
+                        Seed Selection
+                    </h3>
+                    <ol class="guidance-steps">
+                        ${crop.guidance.seedSelection.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="sprout"></i>
+                        Sowing Techniques
+                    </h3>
+                    <ol class="guidance-steps">
+                        ${crop.guidance.sowing.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="droplets"></i>
+                        Irrigation & Fertilization
+                    </h3>
+                    <ol class="guidance-steps">
+                        ${crop.guidance.irrigation.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="bug"></i>
+                        Pest & Disease Management
+                    </h3>
+                    <ol class="guidance-steps">
+                        ${crop.guidance.pestManagement.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="harvest"></i>
+                        Harvesting Methods
+                    </h3>
+                    <ol class="guidance-steps">
+                        ${crop.guidance.harvesting.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="guidance-title">
+                        <i data-lucide="store"></i>
+                        Where to Get Inputs
+                    </h3>
+                    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #10b981;">
+                        <p><strong>Local Agricultural Cooperatives:</strong> Contact your nearest agricultural cooperative society for certified seeds, fertilizers, and pesticides.</p>
+                        <p><strong>Government Schemes:</strong> Check with local agriculture department for subsidized inputs and financial assistance.</p>
+                        <p><strong>Certified Dealers:</strong> Purchase from authorized dealers to ensure quality of agricultural inputs.</p>
+                        <p><strong>Online Platforms:</strong> Various e-commerce platforms now offer agricultural inputs with home delivery.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Close modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Open chatbot
+        function openChatbot() {
+            alert('🤖 AI Crop Assistant\n\nOur intelligent farming assistant is here to help you with:\n\n• Crop selection based on your location\n• Weather-based farming advice\n• Pest and disease identification\n• Market price information\n• Government scheme updates\n\nFeature coming soon! Stay tuned for personalized farming guidance.');
+        }
+
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -23,3 +23,10 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart for {self.user.username}"
+
+class Feedback(models.Model):
+    email = models.EmailField()
+    description = models.TextField(max_length=10000)
+    
+    def __str__(self):
+        return self.email

@@ -562,16 +562,35 @@
     <section class="py-16 bg-gradient-to-r from-green-600 to-blue-500 relative overflow-hidden">
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl font-bold mb-4 text-white">Stay Updated with AgroSage</h2>
-                <p class="text-green-100 mb-8">Subscribe to our newsletter for the latest farming tips, product updates, and agricultural news.</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <input type="email" placeholder="Enter your email" class="px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-green-300 w-full sm:w-auto">
-                    <button class="bg-white text-green-600 font-medium px-8 py-3 rounded-full hover:bg-green-50 transition shadow-lg">
-                        Subscribe
+                <h2 class="text-3xl font-bold mb-4 text-white">We'd Love Your Feedback</h2>
+                <p class="text-green-100 mb-8">Help us improve AgroSage. Let us know your thoughts, suggestions, or any issues you're facing.</p>
+                <form action="{% url 'feedback' %}" method="POST" class="flex flex-col gap-4 items-center">
+                    {% csrf_token %}
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Enter your email" 
+                        required 
+                        class="px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-green-300 w-full sm:w-2/3"
+                    >
+                    <textarea 
+                        name="message" 
+                        rows="4" 
+                        placeholder="Write your message here..." 
+                        required 
+                        class="px-6 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-300 w-full sm:w-2/3 resize-none"
+                    ></textarea>
+                    <button 
+                        type="submit" 
+                        class="bg-white text-green-600 font-medium px-8 py-3 rounded-full hover:bg-green-50 transition shadow-lg"
+                    >
+                        Submit Feedback
                     </button>
-                </div>
+                </form>
             </div>
         </div>
+
+
         
         <!-- Decorative elements -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10">

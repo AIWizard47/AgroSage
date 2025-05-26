@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Check, MarketItems, Cart
+from .models import Check, MarketItems, Cart, Feedback
 from .groq_ai import ask_ai
 import requests
 from django.http import HttpResponse
@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 from io import BytesIO
 from .models import Cart
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 def index(request):
@@ -254,3 +255,22 @@ def payment_success(request):
         Cart.objects.filter(user=request.user).delete()
 
     return response
+
+@require_POST
+def feedback(request):
+    email = request.POST.get("email")
+    description = request.POST.get("message")
+
+    if email and description:
+        # Optionally save to the database
+        Feedback.objects.create(email=email, description=description)
+        
+        # Optional: success message
+        messages.success(request, "Thank you for your feedback!")
+    else:
+        messages.error(request, "Please fill in both fields.")
+
+    return redirect('index')
+
+def guidance(request):
+    return render(request,"home/guidance.html")
