@@ -7,12 +7,19 @@ class Check(models.Model):
     is_farmer = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
 
+class Category(models.Model):
+    name = models.CharField(max_length=300)
+    def __str__(self):
+        return self.name 
+
 class MarketItems(models.Model):
     items_name = models.CharField(max_length=1000)
     items_description = models.TextField(max_length=1000)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE)   # e.g. “Fertilizer”, “Tool”
     item_price = models.IntegerField()
     item_image = models.ImageField(upload_to='market_items/')
     items_weight = models.IntegerField()
+    item_rating = models.IntegerField(default=0)
     def __str__(self):
         return self.items_name
     

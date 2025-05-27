@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search | AgroSage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --primary-dark: #1B5E20;
+            --accent: #FFC107;
+            --text: #263238;
+            --text-light: #546E7A;
+            --bg-light: #F9FBF7;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .search-box {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        input, select {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .search-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .search-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .results-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            height: 160px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 3rem;
+        }
+        
+        .product-info {
+            padding: 1.2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-category {
+            background-color: var(--primary-light);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 5px;
+        }
+        
+        .stars {
+            color: var(--accent);
+            letter-spacing: -2px;
+        }
+        
+        .product-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .action-btn {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .action-btn.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .empty-results {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-light);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">🌱</span>
+                <span>AgroSage</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Search Agricultural Products</h1>
+
+        <!-- 🔍 Search Form -->
+        <div class="search-box">
+            <form class="search-form" method="get" action="{% url 'search_products' %}">
+                <div class="form-group">
+                    <label for="q">Product Name</label>
+                    <input type="text" name="q" id="q" value="{{ request.GET.q }}" placeholder="e.g. fertilizer, plow">
+                </div>
+                
+                <div class="form-group">
+                    <label for="min_price">Minimum Price (₹)</label>
+                    <input type="number" name="min_price" id="min_price" value="{{ request.GET.min_price }}" placeholder="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="max_price">Maximum Price (₹)</label>
+                    <input type="number" name="max_price" id="max_price" value="{{ request.GET.max_price }}" placeholder="5000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sort">Sort by</label>
+                    <select name="sort" id="sort">
+                        <option value="price" {% if request.GET.sort == "item_price" %}selected{% endif %}>Price (Low to High)</option>
+                        <option value="-price" {% if request.GET.sort == "-item_price" %}selected{% endif %}>Price (High to Low)</option>
+                        <option value="rating" {% if request.GET.sort == "item_rating" %}selected{% endif %}>Rating (Low to High)</option>
+                        <option value="-rating" {% if request.GET.sort == "-item_rating" %}selected{% endif %}>Rating (High to Low)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="search-btn">
+                        <span>🔍</span> Search Products
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 🧺 Product Results -->
+        <div class="results-header">
+            <h2>Search Results</h2>
+            {% if products %}
+                <span class="results-count">{{ products|length }} products found</span>
+            {% endif %}
+        </div>
+
+        {% if products %}
+            <div class="product-grid">
+                {% for product in products %}
+                    <div class="product-card">
+                        <div class="product-img">
+                            {% if product.category == "Seeds" %}🌱
+                            {% elif product.category == "Fruit" %}💧
+                            {% elif product.category == "Tools" %}🔨
+                            {% elif product.category == "Machinery" %}🚜
+                            {% else %}🌿
+                            {% endif %}
+                            {% comment %} <img src="{% product.item_image %}" alt=""> {% endcomment %}
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">{{ product.category }}</span>
+                            <div class="product-price">₹{{ product.item_price }}</div>
+                            <div class="product-rating">
+                                <span class="stars">
+                                    {% if product.item_rating >= 1 %}★{% else %}☆{% endif %}
+                                    {% if product.item_rating >= 2 %}★{% else %}☆{% endif %}
+                                    {% if product.item_rating >= 3 %}★{% else %}☆{% endif %}
+                                    {% if product.item_rating >= 4 %}★{% else %}☆{% endif %}
+                                    {% if product.item_rating >= 5 %}★{% else %}☆{% endif %}
+                                </span>
+                                <span>{{ product.item_rating }}/5</span>
+                            </div>
+                            <p class="product-description">{{ product.items_description|default:"No description available." }}</p>
+                            <div class="product-actions">
+                                <button class="action-btn">Details</button>
+                                <button class="action-btn primary">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-results">
+                <div class="empty-icon">🔍</div>
+                <h3>No products found</h3>
+                <p>Try adjusting your search criteria or browse our categories</p>
+            </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 AgroSage - Empowering Farmers with Smart Solutions</p>
+        </div>
+    </footer>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'946746a3d63fc1b0',t:'MTc0ODM2NzQwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

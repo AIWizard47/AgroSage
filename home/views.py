@@ -12,6 +12,8 @@ from xhtml2pdf import pisa
 from io import BytesIO
 from .models import Cart
 from django.views.decorators.http import require_POST
+from .search_index import InvertedIndex
+from .autocomplete import AutocompleteTrie
 
 # Create your views here.
 def index(request):
@@ -274,3 +276,47 @@ def feedback(request):
 
 def guidance(request):
     return render(request,"home/guidance.html")
+
+# ideally, these live in a singleton service
+inverted_index = InvertedIndex()
+autocomplete_trie = AutocompleteTrie()
+
+_loaded = False
+
+def load_indices():
+    global _loaded
+    if _loaded:
+        return
+    for p in MarketItems.objects.all():
+        inverted_index.add_product(p)
+        autocomplete_trie.insert(p)
+        print(p,inverted_index)
+    _loaded = True
+
+# call load_indices() once on startup (e.g. in AppConfig.ready)
+
+def search_products(request):
+    q = request.GET.get('q', '').strip().lower()
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    sort_by = request.GET.get('sort', 'item_price')  # change 'item_price'
+    load_indices()
+    ids = set()
+    if q:
+        terms = q.split()
+        ids = inverted_index.lookup(terms)
+    else:
+        ids = set(MarketItems.objects.values_list('id', flat=True))
+
+    qs = MarketItems.objects.filter(id__in=ids)
+
+    # filter with correct field name
+    if min_price: qs = qs.filter(item_price__gte=min_price)
+    if max_price: qs = qs.filter(item_price__lte=max_price)
+
+    # sort with correct field name
+    valid_sorts = ['item_price', '-item_price', 'item_rating', '-item_rating']
+    if sort_by in valid_sorts:
+        qs = qs.order_by(sort_by)
+
+    return render(request, "home/search_results.html", {"products": qs})

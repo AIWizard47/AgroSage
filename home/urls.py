@@ -16,4 +16,5 @@ urlpatterns = [
     path('payment_success/',views.payment_success,name="payment_success"),
     path('feedback/',views.feedback,name="feedback"),
     path('guidance/',views.guidance,name="guidance"),
+    path('search/', views.search_products, name='search_products'),
 ]
