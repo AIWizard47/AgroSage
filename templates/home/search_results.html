@@ -367,13 +367,13 @@
                 {% for product in products %}
                     <div class="product-card">
                         <div class="product-img">
-                            
-                            {% if product.item_image %}
+                            🌴
+                            {% comment %} {% if product.item_image %}
                                     <div class="w-full h-48 flex items-center justify-center bg-gray-100 rounded-t-lg overflow-hidden">
                                         <img src="{{ product.item_image.url }}" alt="{{ product.items_name }}" class="max-h-full max-w-full object-contain">
                                     </div>
-                            {% endif %}
-                            {% comment %} <img src="{% product.item_image %}" alt=""> {% endcomment %}
+                            {% endif %} {% endcomment %}
+                            {% comment %} <img src="{% product.item_image %}" awlt=""> {% endcomment %}
                         </div>
                         <div class="product-info">
                             <span class="product-category">{{ product.category }}</span>

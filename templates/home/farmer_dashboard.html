@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -1127,15 +1125,20 @@
               <h2>Weather Recommendations</h2>
             </div>
             
-            <div class="section-actions">
-              <button class="secondary-button" id="fullWeatherBtn">
-                Full weather report →
-              </button>
-              <button class="primary-button weather-button" id="weatherAlertBtn">
-                + Set new Alerts
-              </button>
-            </div>
-          </div>
+              <div class="section-actions">
+                <label for="locationSelect" style="margin-right: 10px; font-weight: bold;">Select Location:</label>
+                <select id="locationSelect" class="primary-button">
+                  <option value="Bhopal">Bhopal</option>
+                  <option value="Patna">Patna</option>
+                  <option value="Muzaffarpur">Muzaffarpur</option>
+                  <option value="Bhagalpur">Bhagalpur</option>
+                  <option value="Gaya">Gaya</option>
+                  <option value="Dhanbad">Dhanbad</option>
+                  <option value="Ranchi">Ranchi</option>
+                  <option value="Hazaribagh">Hazaribagh</option>
+                </select>
+              </div>
+
           
           <div class="weather-content">
             <div class="weather-details">
@@ -1767,6 +1770,80 @@
     </div>
 
     <script>
+
+      const API_KEY = 'f26cd83e87aa4d4796703795788519d3';
+      let LOCATION = document.getElementById('locationSelect').value;
+
+      async function fetchWeather() {
+        const currentURL = `https://api.openweathermap.org/data/2.5/weather?q=${LOCATION}&appid=${API_KEY}&units=metric`;
+        const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${LOCATION}&appid=${API_KEY}&units=metric`;
+
+        try {
+          const [currentRes, forecastRes] = await Promise.all([
+            fetch(currentURL),
+            fetch(forecastURL)
+          ]);
+
+          const currentData = await currentRes.json();
+          const forecastData = await forecastRes.json();
+
+          const today = new Date();
+          const day = today.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+          const date = today.toISOString().slice(0, 10).split('-').reverse().join('-');
+
+          document.querySelector('.day').textContent = day;
+          document.querySelector('.date').textContent = date;
+          document.querySelector('.location span').textContent = currentData.name;
+          document.querySelector('.stat-text').textContent = currentData.weather[0].description;
+          document.querySelector('.stat-emoji').textContent = getWeatherEmoji(currentData.weather[0].main);
+          document.querySelector('.stat-value').textContent = `${Math.round(currentData.main.temp)}°`;
+          document.querySelectorAll('.stat-value')[1].textContent = `${currentData.main.humidity}%`;
+
+          const forecastContainer = document.querySelector('.forecast-items');
+          forecastContainer.innerHTML = '';
+          const forecastList = forecastData.list.filter((_, idx) => idx % 8 === 0);
+
+          forecastList.slice(0, 5).forEach(item => {
+            const date = new Date(item.dt_txt);
+            const day = date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+            const emoji = getWeatherEmoji(item.weather[0].main);
+            const temp = `${Math.round(item.main.temp)}°`;
+
+            forecastContainer.innerHTML += `
+              <div class="forecast-item">
+                <div class="forecast-day">${day}</div>
+                <div class="forecast-emoji">${emoji}</div>
+                <div class="forecast-temp">${temp}</div>
+              </div>
+            `;
+          });
+
+        } catch (error) {
+          console.error('Weather fetch error:', error);
+        }
+      }
+
+      function getWeatherEmoji(condition) {
+        switch (condition.toLowerCase()) {
+          case 'clear': return '☀️';
+          case 'clouds': return '☁️';
+          case 'rain': return '🌧️';
+          case 'thunderstorm': return '⛈️';
+          case 'drizzle': return '🌦️';
+          case 'snow': return '❄️';
+          case 'mist': return '🌫️';
+          default: return '⛅';
+        }
+      }
+
+      document.getElementById('locationSelect').addEventListener('change', function () {
+        LOCATION = this.value;
+        fetchWeather();
+      });
+
+      fetchWeather(); // Initial fetch
+
+
       // Current date display
       const updateDate = () => {
         const now = new Date();
@@ -1844,23 +1921,8 @@
       });
       
       // Map zoom controls
-      document.getElementById('zoomInBtn').addEventListener('click', function() {
-        const map = document.querySelector('.map svg');
-        const currentViewBox = map.getAttribute('viewBox').split(' ');
-        const width = parseInt(currentViewBox[2]) * 0.8;
-        const height = parseInt(currentViewBox[3]) * 0.8;
-        const x = parseInt(currentViewBox[0]) + (parseInt(currentViewBox[2]) - width) / 2;
-        const y = parseInt(currentViewBox[1]) + (parseInt(currentViewBox[3]) - height) / 2;
-        map.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
-      });
       
-      document.getElementById('zoomOutBtn').addEventListener('click', function() {
-        const map = document.querySelector('.map svg');
-        const currentViewBox = map.getAttribute('viewBox').split(' ');
-        const width = parseInt(currentViewBox[2]) * 1.2;
-        const height = parseInt(currentViewBox[3]) * 1.2;
-        const x = parseInt(currentViewBox[0]) - (width - parseInt(currentViewBox[2])) / 2;
-        const y = parseInt(currentViewBox[1]) - (height - parseInt(currentViewBox[<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'944ecdf6f7324847',t:'MTc0ODExMDgwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-
+      
+    </script>
 </body>
 </html>
