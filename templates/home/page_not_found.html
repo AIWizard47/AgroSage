@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            min-height: 100vh;
+        }
+        
+        .astronaut {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        
+        .meteor {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: white;
+            border-radius: 50%;
+            animation: meteor 6s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes meteor {
+            0% {
+                transform: translate(0, 0) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(300px, 300px) rotate(45deg);
+                opacity: 0;
+            }
+        }
+        
+        .button-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+            50% { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+            100% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
+        <div class="astronaut mb-6">
+            <svg width="180" height="180" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#E0E7FF" stroke="#4F46E5" stroke-width="1.5"/>
+                <path d="M9 9H9.01M15 9H15.01M12 17C10.3431 17 9 15.6569 9 14V13H15V14C15 15.6569 13.6569 17 12 17Z" stroke="#4F46E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 13.5V13C7 9.13401 9.13401 6 13 6C16.866 6 19 9.13401 19 13V13.5" stroke="#4F46E5" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="9" cy="9" r="1" fill="#4F46E5"/>
+                <circle cx="15" cy="9" r="1" fill="#4F46E5"/>
+            </svg>
+        </div>
+        
+        <h1 class="text-7xl md:text-9xl font-bold text-white mb-2">404</h1>
+        <h2 class="text-2xl md:text-4xl font-semibold text-white mb-6">Page Not Found</h2>
+        <p class="text-lg text-indigo-100 mb-8 max-w-md">Oops! Looks like you've ventured into the unknown. The page you're looking for has drifted off into space.</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="{% url 'index' %}" class="button-glow px-8 py-3 bg-white text-indigo-700 rounded-full font-medium hover:bg-indigo-100 transition-all duration-300 transform hover:scale-105">
+                Go Home
+            </a>
+            <button id="reportBtn" class="px-8 py-3 bg-transparent border-2 border-white text-white rounded-full font-medium hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                Report Problem
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Report a Problem</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-medium mb-2" for="message">
+                    What were you looking for?
+                </label>
+                <textarea id="message" rows="4" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            </div>
+            <div class="flex justify-end">
+                <button id="submitReport" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        const starCount = 100;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            // Random position
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            
+            // Random size
+            const size = Math.random() * 3;
+            
+            // Random animation delay
+            const delay = Math.random() * 2;
+            
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDelay = `${delay}s`;
+            
+            starsContainer.appendChild(star);
+        }
+        
+        // Create meteors
+        for (let i = 0; i < 5; i++) {
+            const meteor = document.createElement('div');
+            meteor.classList.add('meteor');
+            
+            // Random position
+            const x = Math.random() * 80;
+            const y = Math.random() * 40;
+            
+            // Random animation delay
+            const delay = Math.random() * 15;
+            
+            meteor.style.left = `${x}%`;
+            meteor.style.top = `${y}%`;
+            meteor.style.animationDelay = `${delay}s`;
+            
+            starsContainer.appendChild(meteor);
+        }
+        
+        // Modal functionality
+        const reportBtn = document.getElementById('reportBtn');
+        const reportModal = document.getElementById('reportModal');
+        const closeModal = document.getElementById('closeModal');
+        const submitReport = document.getElementById('submitReport');
+        
+        reportBtn.addEventListener('click', () => {
+            reportModal.classList.remove('hidden');
+        });
+        
+        closeModal.addEventListener('click', () => {
+            reportModal.classList.add('hidden');
+        });
+        
+        submitReport.addEventListener('click', () => {
+            const message = document.getElementById('message').value;
+            alert('Thank you for your report! We\'ll look into this issue.');
+            reportModal.classList.add('hidden');
+            document.getElementById('message').value = '';
+        });
+        
+        // Close modal when clicking outside
+        reportModal.addEventListener('click', (e) => {
+            if (e.target === reportModal) {
+                reportModal.classList.add('hidden');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'947017753048c230',t:'MTc0ODQ1OTg0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

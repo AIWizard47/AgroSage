@@ -333,3 +333,8 @@ def search_products(request):
         qs = qs.order_by(sort_by)
 
     return render(request, "home/search_results.html", {"products": qs})
+
+
+# views.py
+def page_not_found(request, exception=None):  # Include `exception` argument
+    return render(request, 'home/page_not_found.html', status=404)
