@@ -1,7 +1,7 @@
 # utils/groq_ai.py
 import requests
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def ask_ai(prompt):

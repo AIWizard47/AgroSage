@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Check, MarketItems, Cart, Feedback
+from .models import Check, MarketItems, Cart, Feedback, Category
 from .groq_ai import ask_ai
 import requests
 from django.http import HttpResponse
@@ -157,32 +157,40 @@ def list_item(request):
         check = Check.objects.get(user=user)
         if not check.is_farmer:
             messages.error(request, "Only farmers can list items.")
-            return redirect("index")  # Or some 'not authorized' page
+            return redirect("index")
     except Check.DoesNotExist:
         messages.error(request, "Access denied. Farmer status not verified.")
         return redirect("index")
 
+    categories = Category.objects.all()
+
     if request.method == 'POST':
         name = request.POST.get('items_name')
         description = request.POST.get('items_description')
+        category_id = request.POST.get('category')
         price = request.POST.get('item_price')
         weight = request.POST.get('items_weight')
         image = request.FILES.get('item_image')
 
-        if name and description and price and weight and image:
-            MarketItems.objects.create(
-                items_name=name,
-                items_description=description,
-                item_price=price,
-                items_weight=weight,
-                item_image=image
-            )
-            messages.success(request, "Item listed successfully!")
-            return redirect('market')  # Redirect to marketplace
+        if name and description and category_id and price and weight and image:
+            try:
+                category = Category.objects.get(id=category_id)
+                MarketItems.objects.create(
+                    items_name=name,
+                    items_description=description,
+                    category=category,
+                    item_price=price,
+                    items_weight=weight,
+                    item_image=image
+                )
+                messages.success(request, "Item listed successfully!")
+                return redirect('market')
+            except Category.DoesNotExist:
+                messages.error(request, "Invalid category selected.")
         else:
             messages.error(request, "All fields are required.")
 
-    return render(request, "marketplace/list_items.html")
+    return render(request, "marketplace/list_items.html", {"categories": categories})
     
 
 def farmer_dashboard(request):
