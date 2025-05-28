@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Check, MarketItems, Cart, Feedback, Category
 from .groq_ai import ask_ai
 import requests
+from .formatter import format_ai_response_to_html
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
@@ -106,15 +107,19 @@ def market(request):
     else:
         return redirect("login")  # replace "login" with your login URL name
 
+
 def farmer_guidance(request):
     ai_response = None
+    formatted_response = None
+
     if request.method == 'POST':
         question = request.POST.get('question')
         if question:
             ai_response = ask_ai(question)
+            formatted_response = format_ai_response_to_html(ai_response)
 
     return render(request, 'home/farmer_guidance.html', {
-        'ai_response': ai_response
+        'ai_response': formatted_response or ai_response
     })
     
 @login_required
