@@ -17,4 +17,5 @@ urlpatterns = [
     path('feedback/',views.feedback,name="feedback"),
     path('ai-guidance/',views.guidance,name="guidance"),
     path('search/', views.search_products, name='search_products'),
+    path('about-us/',views.about_us,name='about_us')
 ]

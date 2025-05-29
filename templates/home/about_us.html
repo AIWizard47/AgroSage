@@ -1,0 +1,398 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - AgroSage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8faf5;
+        }
+        .hero-pattern {
+            background-color: #4CAF50;
+            background-image: radial-gradient(#ffffff33 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .team-member:hover .overlay {
+            opacity: 1;
+        }
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            height: calc(100% - 15px);
+            width: 2px;
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <button onclick="window.location.href='{% url 'index' %}'">
+                    <svg class="w-10 h-10" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25,10 C35,10 40,17.5 40,27.5 C40,37.5 32.5,42.5 25,42.5 C17.5,42.5 10,37.5 10,27.5 C10,17.5 15,10 25,10 Z" fill="#52b788"/>
+                        <path d="M25,42.5 L25,27.5 M17.5,20 L32.5,35 M17.5,35 L32.5,20" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="25" cy="27.5" r="3.5" fill="#d8f3dc" stroke="#2d6a4f" stroke-width="1"/>
+                    </svg>
+                    </button>
+                    <span class="ml-2 text-xl font-bold text-gray-800">AgroSage</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="{% url 'index' %}" class="text-gray-600 hover:text-green-600 transition">Home</a>
+                    <a href="#" class="text-green-600 font-medium">About Us</a>
+                                    {% if user.is_authenticated %}
+                    <a href="#"  class="text-gray-600 hover:text-green-600 transition" onclick="window.location.href='{% url 'market' %}'">Products</a>
+                {% else %}
+                    <a href="#" class="text-gray-600 hover:text-green-600 transition"  onclick="window.location.href='{% url 'login' %}'">Products</a>
+                {% endif %}
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-600 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="md:hidden hidden pt-4 pb-2">
+                <a href="{% url 'index' %}" class="block py-2 text-gray-600 hover:text-green-600">Home</a>
+                <a href="#" class="block py-2 text-green-600 font-medium">About Us</a>
+                
+                {% if user.is_authenticated %}
+                    <a href="#" class="block py-2 text-gray-600 hover:text-green-600" onclick="window.location.href='{% url 'market' %}'">Products</a>
+                {% else %}
+                    <a href="#" class="block py-2 text-gray-600 hover:text-green-600" onclick="window.location.href='{% url 'login' %}'">Products</a>
+                {% endif %}
+                    
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-pattern py-20 md:py-28">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Cultivating a Sustainable Future</h1>
+                <p class="text-xl text-white opacity-90 mb-8">AgroSage is dedicated to revolutionizing agriculture through innovative solutions, sustainable practices, and expert guidance.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#our-story" class="bg-white text-green-600 hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition duration-300">Our Story</a>
+                    <a href="#contact-us" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-600 px-6 py-3 rounded-full font-medium transition duration-300">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Mission -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <div class="relative">
+                        <div class="absolute -top-4 -left-4 w-24 h-24 bg-green-100 rounded-lg"></div>
+                        <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-green-100 rounded-lg"></div>
+                        <div class="relative z-10 bg-green-600 p-1 rounded-lg">
+                            <img src="{% static 'media/header-compress.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Our Mission</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">At AgroSage, our mission is to empower farmers and agricultural businesses with cutting-edge technology, sustainable practices, and expert knowledge to maximize productivity while preserving our planet's resources for future generations.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-green-50 p-5 rounded-lg">
+                            <div class="text-green-600 mb-3">
+                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Sustainable Farming</h3>
+                            <p class="text-gray-600">Promoting eco-friendly agricultural practices that reduce environmental impact.</p>
+                        </div>
+                        <div class="bg-green-50 p-5 rounded-lg">
+                            <div class="text-green-600 mb-3">
+                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Innovation</h3>
+                            <p class="text-gray-600">Developing and implementing innovative solutions to agricultural challenges.</p>
+                        </div>
+                        <div class="bg-green-50 p-5 rounded-lg">
+                            <div class="text-green-600 mb-3">
+                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Community Support</h3>
+                            <p class="text-gray-600">Building strong relationships with farming communities worldwide.</p>
+                        </div>
+                        <div class="bg-green-50 p-5 rounded-lg">
+                            <div class="text-green-600 mb-3">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Education</h3>
+                            <p class="text-gray-600">Sharing knowledge and best practices to empower agricultural professionals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Our Story -->
+        <section id="our-story" class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Story</h2>
+                    <p class="text-gray-600">AgroSage began with a single mission — to empower farmers with intelligent, accessible, and sustainable agricultural solutions. Here’s how we’ve grown into a trusted partner for thousands of farmers worldwide.</p>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="space-y-12">
+                        <div class="relative pl-12 timeline-item">
+                            <div class="absolute left-0 top-0 bg-green-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-bold">1</div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Inception (2021)</h3>
+                            <p class="text-gray-600 leading-relaxed">AgroSage was founded by a passionate team of agri-engineers, software developers, and environmentalists who recognized the challenges farmers face in a rapidly changing climate. With just a prototype of our smart soil sensor and AI recommendation engine, we set out to make precision farming accessible to every farmer.</p>
+                        </div>
+                        <div class="relative pl-12 timeline-item">
+                            <div class="absolute left-0 top-0 bg-green-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-bold">2</div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Field Testing & Community Engagement (2022)</h3>
+                            <p class="text-gray-600 leading-relaxed">In 2022, we partnered with rural farming cooperatives across India to pilot our early products. These trials not only validated our AI-driven insights but also helped us shape tools that addressed real field problems — from optimizing irrigation to detecting crop diseases early.</p>
+                        </div>
+                        <div class="relative pl-12 timeline-item">
+                            <div class="absolute left-0 top-0 bg-green-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-bold">3</div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Launch of AgroSage Platform (2023)</h3>
+                            <p class="text-gray-600 leading-relaxed">With feedback from over 500 farmers, we launched the full AgroSage platform in 2023 — featuring a multilingual dashboard, crop advisory AI, weather-based planning, and a smart marketplace connecting farmers directly with vendors and buyers.</p>
+                        </div>
+                        <div class="relative pl-12 timeline-item">
+                            <div class="absolute left-0 top-0 bg-green-600 rounded-full w-8 h-8 flex items-center justify-center text-white font-bold">4</div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Scaling Up (2024 & Beyond)</h3>
+                            <p class="text-gray-600 leading-relaxed">Today, AgroSage serves over 15,000 farmers across South Asia and East Africa. With upcoming features like drone-integrated crop mapping and voice-based AI guidance, we remain committed to shaping a future where agriculture is intelligent, inclusive, and environmentally conscious.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+  
+    <!-- Values -->
+    <section class="py-16 bg-green-600">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Our Core Values</h2>
+                <p class="text-white text-opacity-90">The principles that guide everything we do at AgroSage.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">Sustainability</h3>
+                    <p class="text-gray-600 text-center">We believe in agricultural practices that meet present needs without compromising the ability of future generations to meet their own needs.</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">Innovation</h3>
+                    <p class="text-gray-600 text-center">We continuously seek new and better ways to address agricultural challenges, embracing technology and creative thinking.</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">Community</h3>
+                    <p class="text-gray-600 text-center">We value the agricultural community and work collaboratively with farmers, researchers, and partners to achieve shared goals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us -->
+    <section id="contact-us" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/2 bg-green-600 p-8 text-white">
+                            <h2 class="text-3xl font-bold mb-6">Get in Touch</h2>
+                            <p class="mb-6">Have questions about our solutions or want to learn more about how AgroSage can help your agricultural business? Reach out to us today.</p>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <svg class="w-6 h-6 mr-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <h3 class="font-semibold">Address</h3>
+                                        <p>123 Agricultural Way<br>Innovation Valley, CA 94123</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="w-6 h-6 mr-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <div>
+                                        <h3 class="font-semibold">Email</h3>
+                                        <p>info@agrosage.com</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <svg class="w-6 h-6 mr-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <div>
+                                        <h3 class="font-semibold">Phone</h3>
+                                        <p>+1 (555) 123-4567</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 p-8">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-6">Send Us a Message</h2>
+                            <form method="post" class="space-y-4">
+                                {% csrf_token %}
+                                {{ form.non_field_errors }}
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                                    {{ form.name }}
+                                    {{ form.name.errors }}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                    {{ form.email }}
+                                    {{ form.email.errors }}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                                    {{ form.subject }}
+                                    {{ form.subject.errors }}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                                    {{ form.message }}
+                                    {{ form.message.errors }}
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">Send Message</button>
+
+                                {% if success %}
+                                    <p class="text-green-600 font-medium mt-2">Thank you! Your message has been sent.</p>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <button onclick="window.location.href='{% url 'index' %}'">
+                    <svg class="w-10 h-10" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25,10 C35,10 40,17.5 40,27.5 C40,37.5 32.5,42.5 25,42.5 C17.5,42.5 10,37.5 10,27.5 C10,17.5 15,10 25,10 Z" fill="#52b788"/>
+                        <path d="M25,42.5 L25,27.5 M17.5,20 L32.5,35 M17.5,35 L32.5,20" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="25" cy="27.5" r="3.5" fill="#d8f3dc" stroke="#2d6a4f" stroke-width="1"/>
+                    </svg>
+                    </button>
+                        <span class="ml-2 text-xl font-bold">AgroSage</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Cultivating a sustainable future through innovative agricultural solutions.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Soil Analysis</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Crop Management</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Sustainable Farming</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Agricultural Consulting</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Technology Integration</a></li>
+                    </ul>
+                </div>
+                <div>
+                    
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 AgroSage. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9476ab731070482f',t:'MTc0ODUyODgxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

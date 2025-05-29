@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Check, MarketItems, Cart, Feedback, Category
+from .forms import ContactForm
 from .groq_ai import ask_ai
 import requests
 from .formatter import format_ai_response_to_html
@@ -338,3 +339,16 @@ def search_products(request):
 # views.py
 def page_not_found(request, exception=None):  # Include `exception` argument
     return render(request, 'home/page_not_found.html', status=404)
+
+def about_us(request):
+    form = ContactForm()
+    success = False
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            success = True
+            form = ContactForm()  # reset form
+
+    return render(request, 'home/about_us.html', {'form': form, 'success': success})

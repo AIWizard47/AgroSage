@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        html{
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Raleway', sans-serif;
             background-color: #f7f5f0;
@@ -48,31 +51,25 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="flex items-center mb-4 md:mb-0">
                     <div class="mr-3">
-                        <svg class="w-10 h-10" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                        <button onclick="window.location.href='{% url 'index' %}'">
+                    <svg class="w-10 h-10" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
                         <path d="M25,10 C35,10 40,17.5 40,27.5 C40,37.5 32.5,42.5 25,42.5 C17.5,42.5 10,37.5 10,27.5 C10,17.5 15,10 25,10 Z" fill="#52b788"/>
                         <path d="M25,42.5 L25,27.5 M17.5,20 L32.5,35 M17.5,35 L32.5,20" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/>
                         <circle cx="25" cy="27.5" r="3.5" fill="#d8f3dc" stroke="#2d6a4f" stroke-width="1"/>
                     </svg>
+                    </button>
                     </div>
                     <h1 class="text-2xl font-bold heading text-gray-800">AgroSage</h1>
                 </div>
-                <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <input type="text" placeholder="Search products..." class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-200">
                         <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="window.location.href='{% url 'search_products' %}'">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </button>
                     </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="#" class="text-gray-700 hover:text-green-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </a>
-                    <a href="{% url "view_cart" %}" class="text-gray-700 hover:text-green-700 relative">
+                    <a href="{% url 'view_cart' %}" class="text-gray-700 hover:text-green-700 relative">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
@@ -90,7 +87,7 @@
                 <div class="md:w-1/2 mb-8 md:mb-0">
                     <h2 class="text-4xl md:text-5xl font-bold heading mb-4">Fresh Farm Products Direct to Your Door</h2>
                     <p class="text-lg mb-6">Discover quality agricultural products from trusted farmers and suppliers.</p>
-                    <button class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">Shop Now</button>
+                    <button class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300" onclick="window.location.href='#product'">Shop Now</button>
                 </div>
                 <div class="md:w-1/2 flex justify-center">
                     <img class="w-full h-auto object-cover rounded-2xl shadow-lg border-4 border-white"" src="{% static 'media/17843244.jpg' %}" alt="">
@@ -98,9 +95,8 @@
             </div>
         </div>
     </section>
-
     <!-- All Products -->
-    <section class="py-12 bg-gray-50">
+    <section class="py-12 bg-gray-50" id="product">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-3xl font-bold heading text-gray-800">All Products</h2>
@@ -145,85 +141,8 @@
             </div>
             {% endfor %}
             </div>
-            <div class="mt-10 flex justify-center">
-                <button class="btn-outline px-6 py-3 rounded-full font-semibold">Load More Products</button>
-            </div>
         </div>
     </section>
-
-    <!-- Farmer Spotlight -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold heading text-gray-800 mb-8 text-center">Meet Our Farmers</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Farmer 1 -->
-                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md p-6 text-center">
-                    <div class="w-32 h-32 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-20 h-20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="40" r="20" fill="#A1887F"/>
-                            <path d="M30 85C30 70 40 65 50 65C60 65 70 70 70 85" fill="#A1887F"/>
-                            <circle cx="42" cy="38" r="3" fill="white"/>
-                            <circle cx="58" cy="38" r="3" fill="white"/>
-                            <path d="M45 48C45 48 47 50 50 50C53 50 55 48 55 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Karishma kumari</h3>
-                    <p class="text-green-700 font-medium mb-3">Organic Vegetables</p>
-                    <p class="text-gray-600 text-sm mb-4">Growing organic vegetables for over 15 years using sustainable farming practices.</p>
-                    <button class="btn-outline px-4 py-2 rounded-full font-medium">View Products</button>
-                </div>
-
-                <!-- Farmer 2 -->
-                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md p-6 text-center">
-                    <div class="w-32 h-32 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-20 h-20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="40" r="20" fill="#BCAAA4"/>
-                            <path d="M30 85C30 70 40 65 50 65C60 65 70 70 70 85" fill="#BCAAA4"/>
-                            <circle cx="42" cy="38" r="3" fill="white"/>
-                            <circle cx="58" cy="38" r="3" fill="white"/>
-                            <path d="M45 48C45 48 47 50 50 50C53 50 55 48 55 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">suraj kumar</h3>
-                    <p class="text-green-700 font-medium mb-3">Fruit Orchard</p>
-                    <p class="text-gray-600 text-sm mb-4">Third-generation fruit farmer specializing in apples, pears, and berries.</p>
-                    <button class="btn-outline px-4 py-2 rounded-full font-medium">View Products</button>
-                </div>
-
-                <!-- Farmer 3 -->
-                <div class="bg-gray-50 rounded-lg overflow-hidden shadow-md p-6 text-center">
-                    <div class="w-32 h-32 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-20 h-20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="40" r="20" fill="#8D6E63"/>
-                            <path d="M30 85C30 70 40 65 50 65C60 65 70 70 70 85" fill="#8D6E63"/>
-                            <circle cx="42" cy="38" r="3" fill="white"/>
-                            <circle cx="58" cy="38" r="3" fill="white"/>
-                            <path d="M45 48C45 48 47 50 50 50C53 50 55 48 55 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">shubham kumar</h3>
-                    <p class="text-green-700 font-medium mb-3">Heirloom Seeds</p>
-                    <p class="text-gray-600 text-sm mb-4">Preserving rare and heirloom seed varieties with traditional growing methods.</p>
-                    <button class="btn-outline px-4 py-2 rounded-full font-medium">View Products</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter -->
-    <section class="py-12 bg-green-800 text-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-2xl mx-auto text-center">
-                <h2 class="text-3xl font-bold heading mb-4">Join Our Community</h2>
-                <p class="text-green-100 mb-6">Subscribe to our newsletter for farming tips, seasonal updates, and exclusive offers.</p>
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <button class="bg-white text-green-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300">Subscribe</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-4">
@@ -231,33 +150,18 @@
                 <div>
                     <div class="flex items-center mb-4">
                         <div class="mr-3">
-                            <svg class="w-8 h-8" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="25" cy="25" r="25" fill="#4CAF50"/>
-                                <path d="M15 25C15 20 20 15 25 15C30 15 35 20 35 25" stroke="white" stroke-width="2"/>
-                                <path d="M15 35C15 30 20 25 25 25C30 25 35 30 35 35" stroke="white" stroke-width="2"/>
-                                <circle cx="25" cy="20" r="2" fill="white"/>
-                                <circle cx="25" cy="30" r="2" fill="white"/>
+                        <button onclick="window.location.href='{% url 'index' %}'">
+                            <svg class="w-10 h-10" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M25,10 C35,10 40,17.5 40,27.5 C40,37.5 32.5,42.5 25,42.5 C17.5,42.5 10,37.5 10,27.5 C10,17.5 15,10 25,10 Z" fill="#52b788"/>
+                                <path d="M25,42.5 L25,27.5 M17.5,20 L32.5,35 M17.5,35 L32.5,20" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="25" cy="27.5" r="3.5" fill="#d8f3dc" stroke="#2d6a4f" stroke-width="1"/>
                             </svg>
+                        </button>
                         </div>
                         <h3 class="text-xl font-bold heading">AgroSage</h3>
                     </div>
                     <p class="text-gray-400 text-sm mb-4">Connecting farmers and consumers for a sustainable future.</p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
                     </div>
                 </div>
                 <div>
