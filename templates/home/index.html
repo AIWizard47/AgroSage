@@ -409,11 +409,7 @@
                         <h3 class="font-semibold text-lg mb-2">Organic Fertilizer</h3>
                         <p class="text-gray-600 text-sm mb-4">Enhance soil fertility with our 100% organic, nutrient-rich fertilizer.</p>
                         <div class="flex justify-between items-center">
-                            {% if user.is_authenticated %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'market' %}'">Buy</button>
-                            {% else %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'login' %}'">Buy</button>
-                            {% endif %}
+                            
                         </div>
                     </div>
                 </div>
@@ -427,11 +423,7 @@
                         <h3 class="font-semibold text-lg mb-2">Smart Irrigation System</h3>
                         <p class="text-gray-600 text-sm mb-4">Save water with our automated irrigation system that detects soil moisture levels.</p>
                         <div class="flex justify-between items-center">
-                            {% if user.is_authenticated %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'market' %}'">Buy</button>
-                            {% else %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'login' %}'">Buy</button>
-                            {% endif %}
+                            
                         </div>
                     </div>
                 </div>
@@ -445,11 +437,7 @@
                         <h3 class="font-semibold text-lg mb-2">Premium Seed Collection</h3>
                         <p class="text-gray-600 text-sm mb-4">High-yield, disease-resistant seeds for various crops and vegetables.</p>
                         <div class="flex justify-between items-center">
-                            {% if user.is_authenticated %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'market' %}'">Buy</button>
-                            {% else %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'login' %}'">Buy</button>
-                            {% endif %}
+                            
                         </div>
                     </div>
                 </div>
@@ -463,26 +451,9 @@
                         <h3 class="font-semibold text-lg mb-2">Soil Testing Kit</h3>
                         <p class="text-gray-600 text-sm mb-4">Analyze soil composition and nutrient levels for optimal crop growth.</p>
                         <div class="flex justify-between items-center">
-                            {% if user.is_authenticated %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'market' %}'">Buy</button>
-                            {% else %}
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-sm transition" onclick="window.location.href='{% url 'login' %}'">Buy</button>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="text-center mt-10">
-                {% if user.is_authenticated %}
-                    <button class="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg" onclick="window.location.href='{% url 'market' %}'">
-                        View All Products
-                    </button>
-                {% else %}
-                    <button class="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg" onclick="window.location.href='{% url 'login' %}'">
-                        View All Products
-                    </button>
-                {% endif %}
             </div>
         </div>
         
