@@ -19,10 +19,12 @@ class MarketItems(models.Model):
     item_price = models.IntegerField()
     item_image = models.ImageField(upload_to='market_items/')
     items_weight = models.IntegerField()
-    item_rating = models.IntegerField(default=0)
+    min_weight = models.IntegerField(default=0)
+    item_rating = models.IntegerField(default=0)    
+    
     def __str__(self):
         return self.items_name
-    
+
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.OneToOneField(MarketItems, on_delete=models.CASCADE)

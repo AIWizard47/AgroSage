@@ -124,16 +124,18 @@ def farmer_guidance(request):
     })
     
 @login_required
-def add_to_cart(request, item_id):
+def add_to_cart(request, item_id,weight):
     item = get_object_or_404(MarketItems, id=item_id)
     
     # Check if item is already in the cart
     if Cart.objects.filter(user=request.user, items=item).exists():
         # Optionally show a message or redirect with warning
         return redirect('view_cart')
-
     # Add item to cart
     Cart.objects.create(user=request.user, items=item)
+    if weight<=item.items_weight:
+        item.min_weight = weight
+        item.save()
     return redirect('market')
 
 @login_required
@@ -352,3 +354,5 @@ def about_us(request):
             form = ContactForm()  # reset form
 
     return render(request, 'home/about_us.html', {'form': form, 'success': success})
+
+
