@@ -16,7 +16,8 @@ from .models import Cart
 from django.views.decorators.http import require_POST
 from .search_index import InvertedIndex
 from .autocomplete import AutocompleteTrie
-
+import qrcode
+from io import BytesIO
 # Create your views here.
 def index(request):
     is_farmer = False
@@ -144,7 +145,7 @@ def view_cart(request):
     total_count = cart_items.count()
     total_price = 0
     for price in cart_items:
-        total_price += price.items.item_price  * price.items.items_weight
+        total_price += price.items.item_price  * price.items.min_weight
     context = {
         'cart_items': cart_items,
         'total_count' : total_count,
@@ -355,4 +356,15 @@ def about_us(request):
 
     return render(request, 'home/about_us.html', {'form': form, 'success': success})
 
+# views.py
+def payment_qr(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
 
+    # Calculate total
+    cart_items = Cart.objects.filter(user=request.user)
+    total_amount = sum(item.items.item_price * item.items.min_weight for item in cart_items)
+
+    return render(request, 'marketplace/payment_qr.html', {
+        'total_amount': total_amount,
+    })

@@ -17,5 +17,6 @@ path('market/cart/add/<int:item_id>/<int:weight>/', views.add_to_cart, name='add
     path('feedback/',views.feedback,name="feedback"),
     path('ai-guidance/',views.guidance,name="guidance"),
     path('search/', views.search_products, name='search_products'),
-    path('about-us/',views.about_us,name='about_us')
+    path('about-us/',views.about_us,name='about_us'),
+    path('checkout/qr/', views.payment_qr, name='payment_qr'),
 ]

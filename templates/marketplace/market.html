@@ -443,7 +443,7 @@
             const minWeight = parseFloat(document.getElementById('productMinWeight').textContent);
             let currentValue = parseFloat(input.value);
             if (currentValue > minWeight/2) {
-                input.value = (currentValue - 0.5).toFixed(1);
+                input.value = (currentValue - 1).toFixed(1);
                 updateTotalPrice();
             }
         });
@@ -454,7 +454,7 @@
             const minWeight = parseFloat(document.getElementById('productMinWeight').textContent);
             let currentValue = parseFloat(input.value);
             if (currentValue < minWeight) {
-                input.value = (currentValue + 0.5).toFixed(1);
+                input.value = (currentValue + 1).toFixed(1);
                 updateTotalPrice();
             }
         });
@@ -496,7 +496,7 @@
         document.getElementById('productDescription').textContent = data.description;
         document.getElementById('productPrice').textContent = data.price.toFixed(2);
         document.getElementById('productMinWeight').textContent = data.minWeight;
-        document.getElementById('weightSelector').value = data.minWeight/2;
+        document.getElementById('weightSelector').value = Math.round(data.minWeight/2);
 
         if (data.imageUrl) {
             document.getElementById('productImage').src = data.imageUrl;
