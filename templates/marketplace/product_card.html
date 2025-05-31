@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSage - Product Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-light: #60ad5e;
+            --primary-dark: #005005;
+            --secondary-color: #8bc34a;
+            --text-color: #333;
+            --light-text: #666;
+            --bg-color: #f9f9f7;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .logo i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        /* Product Section */
+        .product-section {
+            padding: 40px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .product-left {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .product-right {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-image:hover img {
+            transform: scale(1.03);
+        }
+        
+        /* Recommendations */
+        .recommendations {
+            margin-top: 20px;
+        }
+        
+        .recommendations h3 {
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .recommendation-cards {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) var(--bg-color);
+        }
+        
+        .recommendation-cards::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .recommendation-cards::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        
+        .recommendation-cards::-webkit-scrollbar-thumb {
+            background-color: var(--primary-light);
+            border-radius: 20px;
+        }
+        
+        .recommendation-card {
+            min-width: 200px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .rec-image {
+            height: 120px;
+            overflow: hidden;
+        }
+        
+        .rec-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .rec-info {
+            padding: 12px;
+        }
+        
+        .rec-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .rec-price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Product Details */
+        .product-details {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+        }
+        
+        .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        
+        .product-description {
+            color: var(--light-text);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .product-location {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--light-text);
+        }
+        
+        .product-location i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .farmer-details {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .farmer-details h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        
+        .farmer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .farmer-info-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .farmer-info-item i {
+            width: 25px;
+            color: var(--primary-color);
+        }
+        
+        .add-to-cart {
+            display: inline-block;
+            margin-top: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(46, 125, 50, 0.4);
+        }
+        
+        .add-to-cart i {
+            margin-right: 8px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .product-section {
+                flex-direction: column;
+            }
+            
+            .product-image {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .product-image {
+                height: 250px;
+            }
+            
+            .product-title {
+                font-size: 24px;
+            }
+            
+            .product-price {
+                font-size: 20px;
+            }
+            
+            .recommendation-card {
+                min-width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="flex items-center space-x-2">
+                <span onclick="window.location.href='{% url 'index' %}'" class="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-500 text-transparent bg-clip-text">AgroSage</span>
+            </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'market' %}">Shop</a></li>
+                <li><a href="{% url 'view_cart' %}">Cart</a></li>
+                {% comment %} <li><a href="{% url 'search_products' %}"><i class="fas fa-search"></i></a></li> {% endcomment %}
+            </ul>
+            <button class="mobile-menu-btn" onclick="window.location.href=''">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Product Section -->
+    <div class="container">
+        <div class="product-section">
+            <!-- Left Section -->
+            <div class="product-left">
+                <div class="product-image">
+                    {% comment %} <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Organic Tomatoes"> {% endcomment %}
+                    <img src="{{product.item_image.url}}" alt="">
+                </div>
+                
+                <div class="recommendations">
+                    <h3>You May Also Like</h3>
+                    
+                    
+                        
+                    <div class="recommendation-cards">
+                    {% for item in related_products %}
+                         <div class="recommendation-card" onclick="window.location.href='{% url 'product_card' item.id %}'">
+                            <div class="rec-image">
+                                <img src="{{item.item_image.url}}" alt="Carrots">
+                            </div>
+                            <div class="rec-info">
+                                <div class="rec-title">{{item.items_name}}</div>
+                                <div class="rec-price">₹{{item.item_price}}/kg</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Section -->
+            <div class="product-right">
+                <div class="product-details">
+                    <h1 class="product-title">{{product.items_name}}</h1>
+                    <p class="product-description">
+                        {{product.items_description}}
+                    </p>
+                    <div class="product-price">₹{{product.item_price}}/kg</div>
+                    <div class="product-price">Total Weight : {{product.items_weight}} Quintal</div>
+                    <div class="product-price">Total Price : ₹{{total_price}}</div>
+                    <div class="product-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{product.location}}</span>
+                    </div>
+                    
+                    <div class="farmer-details">
+                        <h3>Farmer Details</h3>
+                        <div class="farmer-info">
+                            <div class="farmer-info-item">
+                                <i class="fas fa-user"></i>
+                                <span>{{product.farmer.first_name}} {{product.farmer.last_name}}</span>
+                            </div>
+                            <div class="farmer-info-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>{{product.farmer.email}}</span>
+                            </div>
+                            <div class="farmer-info-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+91 {{phone_number}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="add-to-cart" onclick="window.location.href='{% url 'add_to_cart' product.id %}'">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+        
+        // Add to cart functionality
+        document.querySelector('.add-to-cart').addEventListener('click', function() {
+            alert('Product added to cart!');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9483be73d6aaa8b0',t:'MTc0ODY2NTkxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

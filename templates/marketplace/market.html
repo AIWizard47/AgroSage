@@ -66,11 +66,11 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="window.location.href='{% url 'search_products' %}'">
+                        {% comment %} <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="window.location.href='{% url 'search_products' %}'">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                        </button>
+                        </button> {% endcomment %}
                     </div>
                     <a href="{% url 'view_cart' %}" class="text-gray-700 hover:text-green-700 relative">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,7 +180,6 @@
             <div class="container mx-auto px-4">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-12">
                     <div>
-                        <span class="text-green-600 font-medium text-sm uppercase tracking-wider">Our Selection</span>
                         <h2 class="text-3xl md:text-4xl font-bold heading text-gray-800 mt-2">Fresh Farm Products</h2>
                         <p class="text-gray-600 mt-2 max-w-xl">Browse our selection of high-quality agricultural products sourced directly from local farmers.</p>
                     </div>
@@ -237,16 +236,15 @@
                                 </div>
                                 <div>
                                     <span class="font-semibold text-green-800">Weight:</span> 
-                                    <span class="text-green-700">{{ item.items_weight }} KG</span>
+                                    <span class="text-green-700">{{ item.items_weight }} Quintal</span>
                                 </div>
                             </div>
                             
                             <div class="flex items-center gap-2" data-product-id="{{item.id}}">
                                 <button class="view-product flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center"
-                                    >
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
+                                    onclick="window.location.href='{% url 'product_card' item.id %}'"    
+                                >
+                                    
                                     View Details
                                 </button>
                             </div>
@@ -274,65 +272,6 @@
                 </div>
             </div>
         </section>
-
-
-<div id="productModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm transition-all duration-300">
-    <div class="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl max-w-md w-full relative shadow-2xl border border-gray-100 transform transition-all duration-300">
-        <button onclick="document.getElementById('productModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors duration-200 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-        <h2 id="productTitle" class="text-2xl font-bold mb-3 text-gray-800"></h2>
-        <div class="overflow-hidden rounded-xl mb-4 shadow-md">
-            <img id="productImage" class="w-full h-56 object-cover transition-transform duration-300 hover:scale-105" src="" alt="Product Image">
-        </div>
-        <div class="flex items-center mb-3">
-            <p class="text-gray-700 font-medium">Rating: </p>
-            <span id="productRating" class="ml-1 text-amber-500 font-semibold"></span>
-            <div class="ml-2 text-amber-400"></div>
-        </div>
-        <p id="productDescription" class="mb-5 text-gray-600 leading-relaxed"></p>
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-5">
-            <p class="mb-2 flex justify-between">
-                <span class="text-gray-700 font-medium">Price:</span>
-                <span id="productPrice" class="font-bold text-gray-900"></span>
-                <span class="text-gray-700">R/KG</span>
-            </p>
-            <p class="mb-3 flex justify-between">
-                <span class="text-gray-700 font-medium">Total Weight:</span>
-                <span id="productMinWeight" class="font-bold text-gray-900"></span>
-                <span class="text-gray-700">KG</span>
-            </p>
-            <div class="flex items-center space-x-3 mb-4">
-                <button id="decreaseWeight" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 font-bold text-lg">-</button>
-                <input id="weightSelector" type="number" class="w-20 text-center border border-gray-300 rounded-lg py-2 px-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-200" step="1" min="0.5">
-                <button id="increaseWeight" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 font-bold text-lg">+</button>
-            </div>
-            <p class="flex justify-between items-center">
-                <span class="text-gray-700 font-medium">Total:</span>
-                <span id="totalPrice" class="font-bold text-xl text-green-600">0.00 R</span>
-            </p>
-        </div>
-        <button id="addToCartBtn" class="bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl mt-2 w-full font-medium text-lg transition-colors duration-200 shadow-md hover:shadow-lg flex items-center justify-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
-                <path d="M16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-            </svg>
-            <span>Add to Cart</span>
-        </button>
-    </div>
-</div>
-
-<!-- Toast -->
-<div id="successToast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg transition-all duration-300 transform translate-y-20 opacity-0 flex items-center space-x-2">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-    </svg>
-    <span>Product added to cart!</span>
-</div>
-
-
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
@@ -401,124 +340,12 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400 text-sm">
-                <p>&copy; 2023 AgroSage. All rights reserved.</p>
+                <p>&copy; 2025 AgroSage. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-         // Current product
-    // Current product data
-    let currentProduct = null;
-
-    // Product data placeholder (simulate real data for modal demo)
-    const productData = {
-        {% for item in market_items %}
-        {{ item.id }}: {
-            id: {{ item.id }},
-            name: "{{ item.items_name|escapejs }}",
-            rating: {{ item.item_rating }},
-            description: "{{ item.items_description|escapejs }}",
-            price: {{ item.item_price }},
-            minWeight: {{ item.items_weight }},
-            imageUrl: "{% if item.item_image %}{{ item.item_image.url }}{% endif %}"
-        },
-        {% endfor %}
-    };
-    let id;
-    let w;
-    document.addEventListener('DOMContentLoaded', function () {
-        // Attach event to all "View Details" buttons
-        document.querySelectorAll('.view-product').forEach(button => {
-            button.addEventListener('click', function () {
-                const card = this.closest('[data-product-id]');
-                const productId = parseInt(card.getAttribute('data-product-id'));
-                openProductModal(productId);
-            });
-        });
-
-        // Handle weight decrease
-        document.getElementById('decreaseWeight').addEventListener('click', function () {
-            const input = document.getElementById('weightSelector');
-            const minWeight = parseFloat(document.getElementById('productMinWeight').textContent);
-            let currentValue = parseFloat(input.value);
-            if (currentValue > minWeight/2) {
-                input.value = (currentValue - 1).toFixed(1);
-                updateTotalPrice();
-            }
-        });
-
-        // Handle weight increase
-        document.getElementById('increaseWeight').addEventListener('click', function () {
-            const input = document.getElementById('weightSelector');
-            const minWeight = parseFloat(document.getElementById('productMinWeight').textContent);
-            let currentValue = parseFloat(input.value);
-            if (currentValue < minWeight) {
-                input.value = (currentValue + 1).toFixed(1);
-                updateTotalPrice();
-            }
-        });
-
-        // Validate weight input
-        document.getElementById('weightSelector').addEventListener('change', function () {
-            const minWeight = parseFloat(document.getElementById('productMinWeight').textContent);
-            if (parseFloat(this.value) < minWeight) {
-                this.value = minWeight;
-            }
-            updateTotalPrice();
-        });
-
-        // Add to cart logic
-        document.getElementById('addToCartBtn').addEventListener('click', function () {
-            const weight = parseFloat(document.getElementById('weightSelector').value);
-            const productName = document.getElementById('productTitle').textContent;
-            
-            // Show toast
-            const toast = document.getElementById('successToast');
-            toast.classList.remove('translate-y-20', 'opacity-0');
-
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-            window.location.href = `cart/add/${id}/${w}/`;
-            console.log(`Added ${weight} KG of ${productName} to cart`);
-        });
-    });
-
-    // Opens modal and populates data
-    function openProductModal(productId) {
-        const data = productData[productId];
-        currentProduct = data;
-        id = productId;
-        // Set modal fields
-        document.getElementById('productTitle').textContent = data.name;
-        document.getElementById('productRating').textContent = data.rating;
-        document.getElementById('productDescription').textContent = data.description;
-        document.getElementById('productPrice').textContent = data.price.toFixed(2);
-        document.getElementById('productMinWeight').textContent = data.minWeight;
-        document.getElementById('weightSelector').value = Math.round(data.minWeight/2);
-
-        if (data.imageUrl) {
-            document.getElementById('productImage').src = data.imageUrl;
-        }
-
-        updateTotalPrice();
-
-        // Show modal (assumes Tailwind or your custom modal)
-        document.getElementById('productModal').classList.remove('hidden');
-    }
-
-    // Calculate total price
-    function updateTotalPrice() {
-        const weight = parseFloat(document.getElementById('weightSelector').value);
-        w = weight;
-        const price = parseFloat(currentProduct.price);
-        const total = weight * price;
-        document.getElementById('totalPrice').textContent = total.toFixed(2);
-    }
-
-
-
 
         // Category pills functionality
         document.querySelectorAll('.category-pill').forEach(pill => {

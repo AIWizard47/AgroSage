@@ -95,6 +95,7 @@ def log_out(request):
     logout(request)  # Pass the request, not the user
     return redirect('index')  # Redirect to your homepage or login page
 
+@login_required
 def market(request):
     user = request.user
     cart_items = Cart.objects.filter(user=request.user)
@@ -125,7 +126,7 @@ def farmer_guidance(request):
     })
     
 @login_required
-def add_to_cart(request, item_id,weight):
+def add_to_cart(request, item_id):
     item = get_object_or_404(MarketItems, id=item_id)
     
     # Check if item is already in the cart
@@ -134,9 +135,9 @@ def add_to_cart(request, item_id,weight):
         return redirect('view_cart')
     # Add item to cart
     Cart.objects.create(user=request.user, items=item)
-    if weight<=item.items_weight:
-        item.min_weight = weight
-        item.save()
+    # if weight<=item.items_weight:
+    #     item.min_weight = weight
+    #     item.save()
     return redirect('market')
 
 @login_required
@@ -144,12 +145,14 @@ def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     total_count = cart_items.count()
     total_price = 0
+    
     for price in cart_items:
-        total_price += price.items.item_price  * price.items.min_weight
+        total_price += price.items.item_price  * price.items.items_weight*100
     context = {
         'cart_items': cart_items,
         'total_count' : total_count,
         'total_price' : total_price,
+        
     }
     return render(request, 'marketplace/cart.html', context)
 
@@ -180,17 +183,20 @@ def list_item(request):
         price = request.POST.get('item_price')
         weight = request.POST.get('items_weight')
         image = request.FILES.get('item_image')
+        location = request.POST.get('location')
 
         if name and description and category_id and price and weight and image:
             try:
                 category = Category.objects.get(id=category_id)
                 MarketItems.objects.create(
+                    farmer = user,
                     items_name=name,
                     items_description=description,
                     category=category,
                     item_price=price,
                     items_weight=weight,
-                    item_image=image
+                    item_image=image,
+                    location = location
                 )
                 messages.success(request, "Item listed successfully!")
                 return redirect('market')
@@ -201,7 +207,7 @@ def list_item(request):
 
     return render(request, "marketplace/list_items.html", {"categories": categories})
     
-
+@login_required
 def farmer_dashboard(request):
     user = request.user
     context = {
@@ -231,14 +237,14 @@ def plant_search(request):
         'plants': plants,
         'query': query
     })
-    
+@login_required
 def generate_invoice(request):
     user = request.user
     cart_items = Cart.objects.filter(user=user)
     context = {
         "user": user,
         "cart_items": cart_items,
-        "total": sum(item.items.item_price * item.items.items_weight for item in cart_items),
+        "total": sum(item.items.item_price*100 * item.items.items_weight for item in cart_items),
     }
     html = render_to_string("home/invoice_template.html", context)
 
@@ -262,7 +268,7 @@ def generate_invoice(request):
 #     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
 #     return response
 
-
+@login_required
 def payment_success(request):
     # Payment verified...
 
@@ -311,7 +317,7 @@ def load_indices():
     _loaded = True
 
 # call load_indices() once on startup (e.g. in AppConfig.ready)
-
+@login_required
 def search_products(request):
     q = request.GET.get('q', '').strip().lower()
     min_price = request.GET.get('min_price')
@@ -357,14 +363,32 @@ def about_us(request):
     return render(request, 'home/about_us.html', {'form': form, 'success': success})
 
 # views.py
+@login_required
 def payment_qr(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
     # Calculate total
     cart_items = Cart.objects.filter(user=request.user)
-    total_amount = sum(item.items.item_price * item.items.min_weight for item in cart_items)
+    total_amount = sum(item.items.item_price *100* item.items.items_weight for item in cart_items)
 
     return render(request, 'marketplace/payment_qr.html', {
         'total_amount': total_amount,
     })
+
+@login_required
+def product_card(request, product_id):
+    # Get the main product
+    product = get_object_or_404(MarketItems, id=product_id)
+    related_products = MarketItems.objects.filter(category=product.category).exclude(id=product.id)
+    check = Check.objects.filter(user=product.farmer).first()
+    phone_number = check.phone_number
+    total_price = product.item_price*100*product.items_weight
+    print(product.item_image)
+    context = {
+        "product": product,
+        "related_products": related_products,
+        "phone_number" : phone_number,
+        "total_price" : total_price,
+    }
+    return render(request, 'marketplace/product_card.html', context)
