@@ -55,3 +55,17 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f'Message from {self.name} ({self.email})'
+
+class FarmerHistory(models.Model):
+    farmer = models.ForeignKey(User,on_delete=models.CASCADE)
+    items_name = models.CharField(max_length=1000)
+    items_description = models.TextField(max_length=1000)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE)   # e.g. “Fertilizer”, “Tool”
+    item_price = models.IntegerField()
+    item_image = models.ImageField(upload_to='market_items/')
+    items_weight = models.IntegerField()
+    item_rating = models.IntegerField(default=0) 
+    location = models.CharField(max_length=300,default="Neelbad, Bhopal, Mp")
+    
+    def __str__(self):
+        return self.items_name

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Check, MarketItems, Cart, Feedback, Category
+from .models import Check, MarketItems, Cart, Feedback, Category, FarmerHistory
 from .forms import ContactForm
 from .groq_ai import ask_ai
 import requests
@@ -206,15 +206,24 @@ def list_item(request):
             messages.error(request, "All fields are required.")
 
     return render(request, "marketplace/list_items.html", {"categories": categories})
-    
+
 @login_required
 def farmer_dashboard(request):
     user = request.user
+    history = FarmerHistory.objects.filter(farmer=user)
+    market_items = MarketItems.objects.filter(farmer=request.user)
+    total_amount = 0
+    for item in history:
+        total_amount += item.item_price*100*item.items_weight
+    print(market_items)
+    print(history)
     context = {
-        "name" : user.first_name
+        "name" : user.first_name,
+        "history":history,
+        "total_amount" : total_amount,
+        "market_items" : market_items
     }
     return render(request,"home/farmer_dashboard.html",context)
-
 
 
 TREFLE_API_TOKEN = 'OhBkdYoPLnwI-HstvgN1ZTnevZfho_C3morAMbbiLSc'
@@ -270,16 +279,32 @@ def generate_invoice(request):
 
 @login_required
 def payment_success(request):
-    # Payment verified...
-
     # Generate invoice
     response = generate_invoice(request)
-
-    # Remove the user's cart items
     if request.user.is_authenticated:
-        Cart.objects.filter(user=request.user).delete()
-
+        # Get all cart items for the user
+        cart_items = Cart.objects.filter(user=request.user)
+        
+        for cart_item in cart_items:
+            item = cart_item.items  # assuming Cart has a ForeignKey to item as `item`
+            # Save to FarmerHistory
+            FarmerHistory.objects.create(
+                farmer=item.farmer,
+                items_name=item.items_name,
+                items_description=item.items_description,
+                category=item.category,
+                item_price=item.item_price,
+                item_image=item.item_image,
+                items_weight=item.items_weight,
+                item_rating=item.item_rating,
+                location=item.location
+            )
+            # Remove item from market (optional)
+            item.delete()
+        # Clear the cart
+        cart_items.delete()
     return response
+
 
 @require_POST
 def feedback(request):
@@ -296,6 +321,7 @@ def feedback(request):
         messages.error(request, "Please fill in both fields.")
 
     return redirect('index')
+
 
 def guidance(request):
     return render(request,"home/guidance.html")
