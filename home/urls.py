@@ -20,4 +20,5 @@ urlpatterns = [
     path('about-us/',views.about_us,name='about_us'),
     path('checkout/qr/', views.payment_qr, name='payment_qr'),
     path('product-card/<int:product_id>/',views.product_card,name="product_card"),
+    path('restore/',views.restore,name="restore")
 ]

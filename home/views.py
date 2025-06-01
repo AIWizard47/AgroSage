@@ -83,6 +83,7 @@ def register_view(request):
             check.is_farmer = True
         elif user_type == "vendor":
             check.is_vendor = True
+        check.phone_number = phone
         check.save()
 
         login(request, user)
@@ -418,3 +419,25 @@ def product_card(request, product_id):
         "total_price" : total_price,
     }
     return render(request, 'marketplace/product_card.html', context)
+
+
+def restore(request):
+    if request.user.is_authenticated:
+        # Get all cart items for the user
+        history = FarmerHistory.objects.all()
+        
+        for item in history:
+            # Save to FarmerHistory
+            MarketItems.objects.create(
+                farmer=item.farmer,
+                items_name=item.items_name,
+                items_description=item.items_description,
+                category=item.category,
+                item_price=item.item_price,
+                item_image=item.item_image,
+                items_weight=item.items_weight,
+                item_rating=item.item_rating,
+                location=item.location
+            )
+            # MarketItems.save()
+        
