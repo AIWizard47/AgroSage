@@ -619,7 +619,9 @@
                         <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition">Services</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Products</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Products</a></li>
+                        {% endif %}
                         <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
                     </ul>
                 </div>
