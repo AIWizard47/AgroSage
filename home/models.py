@@ -25,7 +25,8 @@ class MarketItems(models.Model):
     items_weight = models.IntegerField()
     min_weight = models.IntegerField(default=0)
     item_rating = models.IntegerField(default=0)    
-    location = models.CharField(max_length=300,default="Neelbad, Bhopal, Mp")
+    location = models.CharField(max_length=300,default="Neelbad, Bhopal, Mp-42603")
+    item_list_date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.items_name
@@ -66,6 +67,7 @@ class FarmerHistory(models.Model):
     items_weight = models.IntegerField()
     item_rating = models.IntegerField(default=0) 
     location = models.CharField(max_length=300,default="Neelbad, Bhopal, Mp")
+    item_list_date = models.DateTimeField()
     
     def __str__(self):
         return self.items_name

@@ -1,5 +1,6 @@
 
-
+    <!-- your main template -->
+{% include "components/alert_card.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -406,6 +407,9 @@
                     <div class="product-price">Total Weight : {{product.items_weight}} Quintal</div>
                     <div class="product-price">Total Price : ₹{{total_price}}</div>
                     <div class="product-location">
+                        <span>{{product.item_list_date}}</span>
+                    </div>
+                    <div class="product-location">
                         <i class="fas fa-map-marker-alt"></i>
                         <span>{{product.location}}</span>
                     </div>
@@ -439,18 +443,40 @@
             </div>
         </div>
     </div>
-    
+
+
     <script>
         // Mobile menu toggle
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
-        
-        // Add to cart functionality
-        document.querySelector('.add-to-cart').addEventListener('click', function() {
-            alert('Product added to cart!');
+        function showAlert(message, type = 'success') {
+            const alertCard = document.getElementById('alert-card');
+            const alertMessage = document.getElementById('alert-message');
+
+            // Optional: Change color based on type
+            if (type === 'success') {
+                alertCard.style.backgroundColor = '#4CAF50';
+            } else if (type === 'error') {
+                alertCard.style.backgroundColor = '#f44336';
+            } else if (type === 'warning') {
+                alertCard.style.backgroundColor = '#ff9800';
+            }
+
+            alertMessage.textContent = message;
+            alertCard.style.display = 'block';
+
+            setTimeout(() => {
+                alertCard.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
+
+        // Example: show alert when product added to cart
+        document.querySelector('.add-to-cart')?.addEventListener('click', function() {
+            showAlert('Product added to cart!', 'success');
         });
+
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9483be73d6aaa8b0',t:'MTc0ODY2NTkxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

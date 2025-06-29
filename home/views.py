@@ -57,6 +57,7 @@ def login_view(request):
 def register_view(request):
     user = request.user
     if user.is_authenticated:
+            messages.success(request, "Login successful!")
             return redirect('index')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
@@ -76,6 +77,7 @@ def register_view(request):
             messages.error(request, "Email already in use.")
             return redirect('register')
 
+        messages.success(request, "Registration complete! You can now log in.")
         user = User.objects.create_user(username=email, email=email, password=password,
                                         first_name=first_name, last_name=last_name)
         check = Check(user=user)
@@ -298,7 +300,8 @@ def payment_success(request):
                 item_image=item.item_image,
                 items_weight=item.items_weight,
                 item_rating=item.item_rating,
-                location=item.location
+                location=item.location,
+                item_list_date=item.item_list_date  # Use original listing date
             )
             # Remove item from market (optional)
             item.delete()

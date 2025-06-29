@@ -1,4 +1,5 @@
 {% load static %}
+{% include "components/alert_card.html" %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -217,6 +218,36 @@
     </div>
 
     <script>
+        function showAlert(message, type = 'success') {
+            const alertCard = document.getElementById('alert-card');
+            const alertMessage = document.getElementById('alert-message');
+
+            // Set color based on type
+            const colors = {
+                success: '#4CAF50',
+                error: '#f44336',
+                warning: '#ff9800',
+                info: '#2196F3'
+            };
+            alertCard.style.backgroundColor = colors[type] || '#4CAF50';
+
+            alertMessage.textContent = message;
+            alertCard.style.display = 'block';
+
+            setTimeout(() => {
+                alertCard.style.display = 'none';
+            }, 3000);
+        }
+
+        {% if messages %}
+            {% for message in messages %}
+                showAlert("{{ message|escapejs }}", "{{ message.tags }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+
+    <script>
+
       document.querySelectorAll('.user-type-btn').forEach((btn) => {
         btn.addEventListener('click', function () {
           document.querySelectorAll('.user-type-btn').forEach((b) => b.classList.remove('active'))

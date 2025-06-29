@@ -175,6 +175,19 @@
             </div>
         </section>
 
+        <form method="GET" action="{% url 'marketplace' %}" style="margin-bottom: 20px;">
+            <label for="category">Filter by Category:</label>
+            <select name="category" id="category" onchange="this.form.submit()" style="padding: 5px;">
+                <option value="">All</option>
+                <option value="Wheat" {% if request.GET.category == 'Wheat' %}selected{% endif %}>Wheat</option>
+                <option value="Rice" {% if request.GET.category == 'Rice' %}selected{% endif %}>Rice</option>
+                <option value="Seed" {% if request.GET.category == 'Seed' %}selected{% endif %}>Seed</option>
+                <option value="Fruit" {% if request.GET.category == 'Fruit' %}selected{% endif %}>Fruit</option>
+                <option value="Vegetable" {% if request.GET.category == 'Vegetable' %}selected{% endif %}>Vegetable</option>
+            </select>
+        </form>
+
+
         <!-- All Products -->
         <section class="py-16 bg-gray-50 " id="product">
             <div class="container mx-auto px-4">
